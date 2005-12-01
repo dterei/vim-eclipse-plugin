@@ -60,7 +60,10 @@ public class VimEditor extends EditorPart {
 
   // using linux, "vim" flickers enormously, probably a 
   // problem with doublebuffering in SwingTerminal and SWT_AWT
-  //private final String VIMCMD = "vim";
+  // private final String VIMCMD = "vim";
+
+  // Under Windows it doesnt work at all. All we get is a black screen. Help welcome.
+  //private final String VIMCMD = "c:/Programme/Vim/vim64/vim.exe";
   
 	/**
 	 * The constructor.
