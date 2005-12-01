@@ -1,0 +1,6 @@
+vimplugin 0.0.1:
+  * first public release
+  * hard coded reference to "vim" binary
+  * dependency on SWT_AWT and thus SunJava
+  * testet only under linux
+

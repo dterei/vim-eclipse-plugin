@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!-- 
+
+   This file is part of vimplugin.
+   
+   Copyright (c) 2005 Sebastian Menge and others
+   
+   It is licensed under the CPL. See vimplugin/doc/COPYRIGHT for the complete license.
+
+-->
+
+
+
+<plugin
+   id="vimplugin"
+   name="Vim Plug-in"
+   version="1.0.0"
+   provider-name="Sebastian Menge"
+   class="vimplugin.VimpluginPlugin">
+
+   <runtime>
+      <library name="vimplugin.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/jta25.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+
+
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.core.runtime"/>
+   </requires>
+   <extension
+         id="vimplugin.editors"
+         name="vimeditor"
+         point="org.eclipse.ui.editors">
+      <editor
+            class="vimplugin.editors.VimEditor"
+            default="true"
+            extensions="txt"
+            icon="icons/vim16x16.gif"
+            id="vimplugin.vimeditor"
+            name="VIm"/>
+   </extension>
+
+</plugin>
