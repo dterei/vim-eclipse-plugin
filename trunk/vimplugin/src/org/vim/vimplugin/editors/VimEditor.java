@@ -163,7 +163,7 @@ public class VimEditor extends EditorPart {
     super.dispose();
     
     boolean cancelled = vimjob.cancel();
-    System.err.println("vimjob cancelled: "+cancelled);
+    //System.err.println("vimjob cancelled: "+cancelled);
   }
   
 
