@@ -18,7 +18,7 @@
    name="Vim Plug-in"
    version="1.0.0"
    provider-name="Sebastian Menge"
-   class="vimplugin.VimpluginPlugin">
+   class="org.vim.vimplugin.VimpluginPlugin">
 
    <runtime>
       <library name="vimplugin.jar">
@@ -42,12 +42,13 @@
          name="vimeditor"
          point="org.eclipse.ui.editors">
       <editor
-            class="vimplugin.editors.VimEditor"
+            class="org.vim.vimplugin.editors.VimEditor"
             default="true"
-            extensions="txt"
+            extensions="txt, java, tex, c, h"
+            filenames="README"
             icon="icons/vim16x16.gif"
             id="vimplugin.vimeditor"
-            name="VIm"/>
+            name="Vim"/>
    </extension>
 
 </plugin>
