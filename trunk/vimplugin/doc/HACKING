@@ -1,0 +1,28 @@
+If you want to get your hands dirty, this is the right place for you. 
+
+For the beginning we provide instructions only for linux users. In theory vimplugin 
+will work on other platforms, but thats not tested well by now.
+
+The easiest is to use a standard eclipse installation (e.g. debian or ubuntu)
+
+1.) check out the sources from sourceforge:
+protocol: pserver
+user: anonymous
+host: vimplugin.cvs.sourceforge.net
+path: /cvsroot/vimplugin
+
+module: vimplugin
+
+2.) building
+If all dependencies are met (this should be the standard case), just use "Run as Eclipse 
+Application" (e.g. from the contect menu of the project).
+
+Create a project and a test file. Files with ending txt can be "Open with" "Vim".
+
+3.) hacking
+If you add some features for your own, or fix something to get it run, please create a 
+patch and submit it to the developer-list. This is easy with eclipse:
+
+a) In the context menu of the project there is the wizard Team->Create Patch.
+b) Save patch in filesystem, using unified diff format, project as root of the patch.
+c) mail the file to vimplugin-devel@lists.sourceforge.net
