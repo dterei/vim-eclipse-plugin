@@ -1,4 +1,13 @@
-vimplugin 0.0.1:
+CHANGELOG
+
+This file records the main changes of the releases.
+
+0.0.2
+  * reference to vim binary went to a preference page
+  * a HACKING file t oattract developers
+  * an ant buildfile as a stub to automate the build of packages
+
+0.0.1
   * first public release
   * hard coded reference to "vim" binary
   * dependency on SWT_AWT and thus SunJava

@@ -16,7 +16,7 @@
 <plugin
    id="vimplugin"
    name="Vim Plug-in"
-   version="1.0.0"
+   version="0.0.2"
    provider-name="Sebastian Menge"
    class="org.vim.vimplugin.VimpluginPlugin">
 
@@ -49,6 +49,17 @@
             icon="icons/vim16x16.gif"
             id="vimplugin.vimeditor"
             name="Vim"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.vimplugin.preferences.VimPreferencePage"
+            id="org.vimplugin.preferences.VimPreferencePage"
+            name="VimPlugin Preferences"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.vimplugin.preferences.PreferenceInitializer"/>
    </extension>
 
 </plugin>

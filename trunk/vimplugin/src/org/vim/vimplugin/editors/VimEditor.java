@@ -33,6 +33,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.vim.vimplugin.VimJob;
+import org.vim.vimplugin.VimpluginPlugin;
+import org.vimplugin.preferences.PreferenceConstants;
 
 import de.mud.terminal.SwingTerminal;
 import de.mud.terminal.vt320;
@@ -58,10 +60,8 @@ public class VimEditor extends EditorPart {
 	
   
   /* constants */
+  String VIMCMD = VimpluginPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_STRING);
   
-  //To use Windows just replace VIMCMD with 'vim'. 'vim' should be on the path.
-  private final String VIMCMD = "vim.basic";
-
 	/**
 	 * The constructor.
 	 */
@@ -72,6 +72,7 @@ public class VimEditor extends EditorPart {
 		// setup vim
     try {
 			vim = Runtime.getRuntime().exec(VIMCMD);
+			System.err.println("vim sucsessfully started");
 			vimIs=vim.getInputStream();
 			vimOs=vim.getOutputStream();
 			vimErr=vim.getErrorStream();
