@@ -14,10 +14,10 @@
 
 
 <plugin
-   id="vimplugin"
-   name="Vim Plug-in"
+   id="org.vimplugin.vimplugin"
+   name="Vimplugin"
    version="0.0.3"
-   provider-name="Sebastian Menge"
+   provider-name="vimplugin.sf.net"
    class="org.vim.vimplugin.VimpluginPlugin">
 
    <runtime>
@@ -53,13 +53,13 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.vimplugin.preferences.VimPreferencePage"
+            class="org.vim.vimplugin.preferences.VimPreferencePage"
             id="org.vimplugin.preferences.VimPreferencePage"
             name="Vimplugin"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
-      <initializer class="org.vimplugin.preferences.PreferenceInitializer"/>
+      <initializer class="org.vim.vimplugin.preferences.PreferenceInitializer"/>
    </extension>
 
 </plugin>
