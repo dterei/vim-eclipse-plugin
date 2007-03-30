@@ -1,4 +1,4 @@
-package org.vimplugin.preferences;
+package org.vim.vimplugin.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;

@@ -1,4 +1,4 @@
-package org.vimplugin.preferences;
+package org.vim.vimplugin.preferences;
 
 /**
  * Constant definitions for plug-in preferences

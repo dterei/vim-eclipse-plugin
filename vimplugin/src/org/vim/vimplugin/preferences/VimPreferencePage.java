@@ -1,4 +1,4 @@
-package org.vimplugin.preferences;
+package org.vim.vimplugin.preferences;
 
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
