@@ -6,12 +6,7 @@ will work on other platforms, but thats not tested well by now.
 The easiest is to use a standard eclipse installation (e.g. debian or ubuntu)
 
 1.) check out the sources from sourceforge:
-protocol: pserver
-user: anonymous
-host: vimplugin.cvs.sourceforge.net
-path: /cvsroot/vimplugin
-
-module: vimplugin
+https://vimplugin.svn.sf.net/svnroot/vimplugin/trunk/vimplugin
 
 2.) building
 If all dependencies are met (this should be the standard case), just use "Run as Eclipse 
