@@ -36,7 +36,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.vim.vimplugin.VimJob;
 import org.vim.vimplugin.VimpluginPlugin;
-import org.vimplugin.preferences.PreferenceConstants;
+import org.vim.vimplugin.preferences.PreferenceConstants;
 
 import de.mud.terminal.SwingTerminal;
 import de.mud.terminal.vt320;
