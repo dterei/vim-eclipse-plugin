@@ -14,8 +14,8 @@
 
 
 <plugin
-   id="org.vimplugin.vimplugin"
-   name="Vimplugin"
+   id="org.vimplugin.ui"
+   name="Vimplugin UI"
    version="0.0.3"
    provider-name="vimplugin.sf.net"
    class="org.vim.vimplugin.VimpluginPlugin">
