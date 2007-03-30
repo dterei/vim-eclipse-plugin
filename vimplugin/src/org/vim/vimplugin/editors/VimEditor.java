@@ -11,22 +11,24 @@
 
 package org.vim.vimplugin.editors;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Panel;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.awt.BorderLayout;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
-import java.awt.Panel;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -135,14 +137,30 @@ public class VimEditor extends EditorPart {
     // get the file to edit
     IFileEditorInput iei = (IFileEditorInput)getEditorInput();
 		IFile f = iei.getFile();
-		IPath path = f.getRawLocation();
-		sendCmd(":hide edit "+path.toString()+"\n");
+		IPath ipath = f.getRawLocation();
+
+		String path;
+		if (System.getProperty("os.name").startsWith("Win")) {
+			path = repairPath(ipath.toPortableString());
+		} else {
+			path = ipath.toPortableString();
+		}
+		
+		sendCmd(":hide edit "+path+"\n");
 		setPartName(iei.getName());
     
     // start vim in a seperate Job.
     vimjob = new VimJob(vim,emulation);
 		vimjob.schedule();
-  }
+    }
+
+	// Utility method to use "\ " for spaces with cygwin vim.
+	private String repairPath(String string) {
+		Pattern p = Pattern.compile(" ");
+	    Matcher m = p.matcher(string);
+
+	    return m.replaceAll("\\\\ ");
+	}
 
 	public void sendCmd(String vimCmd) {
 		try {
@@ -177,8 +195,6 @@ public class VimEditor extends EditorPart {
     //System.err.println("vimjob cancelled: "+cancelled);
   }
   
-  
-  
 
 ////////////////   TODO   /////////////////
   
@@ -207,4 +223,5 @@ public class VimEditor extends EditorPart {
 		// TODO Auto-generated method stub
 	
 	}
+
 }

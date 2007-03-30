@@ -18,9 +18,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = VimpluginPlugin.getDefault()
 				.getPreferenceStore();
-		//store.setDefault(PreferenceConstants.P_BOOLEAN, true);
-		//store.setDefault(PreferenceConstants.P_CHOICE, "choice2");
-		store.setDefault(PreferenceConstants.P_STRING, "vim.basic");
+		
+		if (System.getProperty("os.name").startsWith("Win")) {
+			store.setDefault(PreferenceConstants.P_STRING, "C:/cygwin/bin/vim.exe");
+		} else {
+			store.setDefault(PreferenceConstants.P_STRING, "/usr/bin/vim.basic");
+		}
+
 	}
 
 }
