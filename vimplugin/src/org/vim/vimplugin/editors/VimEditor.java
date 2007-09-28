@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -148,10 +149,35 @@ public class VimEditor extends EditorPart {
 		
 		sendCmd(":hide edit "+path+"\n");
 		setPartName(iei.getName());
+       
+        // This prevents difficult recoveries
+        sendCmd(":set noswapfile\n");
+
     
     // start vim in a seperate Job.
     vimjob = new VimJob(vim,emulation);
 		vimjob.schedule();
+       
+        final Display display = Display.getCurrent();
+
+        // If the user quits from inside vim, close the editor tab
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    // Wait until the vim process exits
+                    vim.waitFor();
+
+                    // Spawn job to close editors on the graphics thread
+                    display.asyncExec(new Runnable() {
+                        public void run() {
+                            getSite().getPage().closeAllEditors(false);
+                        }
+                    });
+                } catch (InterruptedException ex) {
+                    // Nothing to do because we're shutting down
+                }
+            }
+        }).start();
     }
 
 	// Utility method to use "\ " for spaces with cygwin vim.
@@ -190,6 +216,9 @@ public class VimEditor extends EditorPart {
   
   public void dispose() {
     super.dispose();
+
+    // Quit without saving when user clicks close editor
+    sendCmd(":q!\n");
     
     boolean cancelled = vimjob.cancel();
     //System.err.println("vimjob cancelled: "+cancelled);
@@ -201,7 +230,8 @@ public class VimEditor extends EditorPart {
   
   public void doSave(IProgressMonitor monitor) {
 		// TODO Auto-generated method stub
-		
+      // Save
+      sendCmd(":w\n");
 	}
 
 	public void doSaveAs() {
