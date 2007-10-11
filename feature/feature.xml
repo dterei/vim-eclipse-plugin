@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <url>
+      <update label="vimplugin Update Site" url="http://vimplugin.sf.net/update"/>
+   </url>
+
    <plugin
          id="org.vimplugin.vimplugin"
          download-size="0"
