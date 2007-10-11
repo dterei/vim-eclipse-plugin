@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://vimplugin.sf.net/update">
+      vimplugin update site
+   </description>
+   <feature url="features/org.vimplugin.vimfeature_0.0.4.jar" id="org.vimplugin.vimfeature" version="0.0.4">
+      <category name="Vimplugin"/>
+   </feature>
+   <feature url="features/org.vimplugin.feature_0.2.4.jar" id="org.vimplugin.feature" version="0.2.4">
+      <category name="Vimplugin"/>
+   </feature>
+   <category-def name="Vimplugin" label="Vimplugin"/>
+</site>
