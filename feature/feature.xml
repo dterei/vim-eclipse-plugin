@@ -2,7 +2,7 @@
 <feature
       id="org.vimplugin.feature"
       label="Vimplugin"
-      version="0.2.4"
+      version="0.3.0"
       provider-name="Vimplugin Project">
 
    <description url="http://www.example.com/description">
