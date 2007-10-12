@@ -78,15 +78,9 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.vimplugin"
             class="org.vimplugin.preferences.VimPreferences"
-            id="org.eeedit.vimplugin.preferences.VimPreferences"
-            name="Vim Preferences"/>
-      <page
-            class="org.vimplugin.preferences.EeeditPreferences"
-            id="org.vimplugin"
-            name="Eeedit Preferences">
-      </page>
+            id="org.vimplugin.preferences.VimPreferences"
+            name="Vimplugin"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
