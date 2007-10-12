@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -44,7 +44,6 @@ import org.vimplugin.utils.WidHandler;
  * must be initialised through one of the two subclasses {@link VimEditor} or
  * {@link VimEditorNewWindow}.
  * 
- * @author Nageshwar M, David Terei
  */
 public class AbstractVimEditor extends TextEditor {
 

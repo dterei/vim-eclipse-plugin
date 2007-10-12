@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ import org.eclipse.ui.PlatformUI;
 /**
  * Place all the global functions in this class
  * 
- * @author Nageshwar M, David Terei
  */
 public final class UtilFunctions {
 

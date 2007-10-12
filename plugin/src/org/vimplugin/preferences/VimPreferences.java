@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -18,9 +18,8 @@ import org.vimplugin.VimPlugin;
 import org.vimplugin.preferences.PreferenceConstants;
 
 /**
- * Eeedit Vims Preference Page.
+ * Vimplugin Vims Preference Page.
  * 
- * @author David Terei
  */
 public class VimPreferences extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {

@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -19,8 +19,6 @@ import org.eclipse.swt.widgets.Composite;
  * Simple class to provide an abstracted interface for getting
  * a SWT Widgets HWND/Wid/Handle.
  * 
- * @author David Terei
- * @since 19/07/07
  */
 public class WidHandler {
 	

@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -16,7 +16,6 @@ import org.vimplugin.VimPlugin;
  * A VimEditor class intended to open a new Vim instance each time its
  * called.
  * 
- * @author Nageshwar M, David Terei
  */
 public class VimEditorNewWindow extends AbstractVimEditor {
 	

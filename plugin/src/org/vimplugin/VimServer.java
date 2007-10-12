@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ import org.vimplugin.preferences.PreferenceConstants;
  * combined eventually to one class or at least reduced to very tiny class
  * which just extend this class in a trivial manner.
  * 
- * @author David Terei
  */
 public class VimServer {
 
