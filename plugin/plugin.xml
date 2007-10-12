@@ -23,14 +23,15 @@
          name="vimeditor"
          point="org.eclipse.ui.editors">
       <editor
-            class="org.vimplugin.editors.VimEditor"
-            default="true"
-            extensions="txt, java, tex, c, h"
-            filenames="README"
-            icon="icons/vim16x16.gif"
             id="org.eeedit.vimplugin.editors.VimEditor"
+            name="Vim"
+            class="org.vimplugin.editors.VimEditor"
             contributorClass="org.vimplugin.VimActionContributor"            
-            name="Vim"/>
+            icon="icons/vim16x16.gif">
+            <contentTypeBinding
+               contentTypeId="org.eclipse.core.runtime.text"
+            /> 
+      </editor>
    </extension>
    <extension
          id="vimplugin.editorsNewWindow"
@@ -40,12 +41,10 @@
             class="org.vimplugin.editors.VimEditorNewWindow"
             contributorClass="org.vimplugin.VimActionContributor"
             default="false"
-            extensions="txt, java, tex, c, h"
-            filenames="README"
             icon="icons/vim16x16.gif"
             id="org.eeedit.vimplugin.editors.VimEditorNewWindow"
             name="Vim (new window)"/>            
-   </extension>   
+   </extension>
    <!--extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
