@@ -67,12 +67,16 @@ public class WidHandler {
 			
 			return f.getInt(parent);
 		} catch (SecurityException e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 		

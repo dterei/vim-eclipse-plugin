@@ -3,8 +3,6 @@ update License to GPL 3 ?
 update Website
 use Issue-Tracker
 announce #vimplugin, CIA-Bot, http://cia.vc/stats/project/vimplugin
-raise Author Issue and incrementally remove @author tags. (see AUTHORS for add. info)
-remove remaining eeedit occurences
 
 check current state (technical)
   * Actions
@@ -13,3 +11,4 @@ check current state (technical)
   * Hotkeys
   * suggest remove of NewWindow option
   * platform-independence: win32 support
+  * use of public/protected/private

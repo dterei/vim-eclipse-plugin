@@ -121,6 +121,7 @@ public final class UtilFunctions {
 		try {
 			c.executeWithChecks(e);
 		} catch (Exception err) {
+			//TODO: better exception handling
 			err.printStackTrace();
 		}
 	}
@@ -152,6 +153,7 @@ public final class UtilFunctions {
 				System.out.println("OPTIONAL: " + p.isOptional());
 			}
 		} catch (Exception e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 	}

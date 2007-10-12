@@ -77,6 +77,7 @@ public class VimConnection implements Runnable {
 		try {
 			tmp = in.readLine();
 		} catch (Exception e) {
+			//TODO: better exception handling
 		}// the function might be saveAndExit.. in such case we wont get any
 		// response
 		return tmp;
@@ -119,6 +120,7 @@ public class VimConnection implements Runnable {
 				}
 			}
 		} catch (IOException e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -126,6 +128,7 @@ public class VimConnection implements Runnable {
 	/**
 	 * Events
 	 */
+	//TODO simplify this long method?
 	private void addListeners() {
 		// DEBUG: write all Events to console
 		listeners.add(new VimListener(this) {
@@ -159,11 +162,13 @@ public class VimConnection implements Runnable {
 							}
 						}
 					} catch (Exception e) {
+						//TODO: better exception handling
 						e.printStackTrace();
 					}
 					try {
 						vc.close();
 					} catch (Exception e) {
+						//TODO: better exception handling
 					}
 				}
 			}

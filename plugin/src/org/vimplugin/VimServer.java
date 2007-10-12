@@ -162,6 +162,7 @@ public class VimServer {
 		try {
 			result = vc.close();
 		} catch (IOException e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 

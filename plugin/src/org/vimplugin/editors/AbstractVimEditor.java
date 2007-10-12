@@ -248,6 +248,7 @@ public class AbstractVimEditor extends TextEditor {
 				VimPlugin.getDefault().stopVimServer(serverID);
 			}
 		} catch (Exception e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 
@@ -299,6 +300,7 @@ public class AbstractVimEditor extends TextEditor {
 		try {
 			document = documentProvider.createDocument(input);
 		} catch (Exception e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -416,6 +418,7 @@ public class AbstractVimEditor extends TextEditor {
 			setDirty(true);
 			System.out.println(first);
 		} catch (Exception e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -437,6 +440,7 @@ public class AbstractVimEditor extends TextEditor {
 			document.set(first);
 			setDirty(true);
 		} catch (Exception e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -465,6 +469,7 @@ public class AbstractVimEditor extends TextEditor {
 				test.codeComplete(position, requestor);
 			}
 		} catch (Exception e) {
+			//TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
