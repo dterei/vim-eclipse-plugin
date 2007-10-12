@@ -2,7 +2,7 @@ update README
 update License to GPL 3 ?
 update Website
 use Issue-Tracker
-announce #vimplugin, CIA-Bot
+announce #vimplugin, CIA-Bot, http://cia.vc/stats/project/vimplugin
 raise Author Issue (Authos only in Authors, not in sources.)
 
 check current state (technical)
@@ -10,3 +10,4 @@ check current state (technical)
   * Popup-Actions
   * tabs
   * Hotkey?
+  * suggest remove of NewWindow option

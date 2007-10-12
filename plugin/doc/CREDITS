@@ -7,16 +7,13 @@ Vim is a highly configurable text editor built to enable efficient text editing
 http://www.vim.org/
 By Bram Moolenaar et al.
 
-    Vimplugin
-Vimplugin is a Eclipse plugin that brings the power of the editor Vim to the Eclipse IDE.
-This projects source code base started from Vimplugin.
-http://vimplugin.sourceforge.net/wiki/pmwiki.php
-By Sebastian Menge
 
     Google Summer of Code
-This project started because two students were given the opportunity
-to work on an open source project for the summer and be paid for it
-out of their coffers. Check out SOC if you haven't before and if your
+This project benefitted a lot because David and Nageshwar were given the opportunity
+to work on an open source project for the summer and be paid for it out of their coffers. Thanks also to Bram for supporting and mentoring them.
+
+Check out SOC if you haven't before and if your
 a student then get involved in it if at all possible.
+http://code.google.com/p/eeedit/
 http://code.google.com/soc/
 By Google Inc.
