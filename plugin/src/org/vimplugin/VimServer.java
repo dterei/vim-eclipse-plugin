@@ -119,7 +119,7 @@ public class VimServer {
 		if( Platform.getOS().equals(Platform.OS_LINUX) )
 			arg2 = "--socketid";
 		else if( Platform.getOS().equals(Platform.OS_WIN32) )
-			arg2 = "--socketid";
+			arg2 = "--windowid";
 		else
 			arg3 = "";
 		
