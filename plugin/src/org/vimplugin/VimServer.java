@@ -11,6 +11,7 @@
 package org.vimplugin;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import org.eclipse.core.runtime.Platform;
@@ -109,21 +110,36 @@ public class VimServer {
 	 *            The id of the window to embed vim into
 	 */
 	public void start(AbstractVimEditor editor, int wid) {
+
+		//gather Strings (nice names for readbility)
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
 				PreferenceConstants.P_GVIM);
-		String arg0 = getNetbeansString(ID);
+		String netbeans = getNetbeansString(ID);
+		String dontfork = "-f"; // foreground -- dont fork
 
-		String arg1 = "-f"; // foreground -- dont fork
-		String arg2 = "";
-		String arg3 = String.valueOf(wid);
-		if( Platform.getOS().equals(Platform.OS_LINUX) )
-			arg2 = "--socketid";
-		else if( Platform.getOS().equals(Platform.OS_WIN32) )
-			arg2 = "--windowid";
-		else
-			arg3 = "";
+		//Platform specific code 
+		String socketid ="--socketid";
+		//use --windowid, under win32 
+		if( Platform.getOS().equals(Platform.OS_WIN32) ) {
+			socketid = "--windowid";
+		}
+			
+		String stringwid = String.valueOf(wid);
+		String[] addopts = VimPlugin.getDefault().getPreferenceStore().getString(
+				PreferenceConstants.P_OPTS).split("\\s");
 		
-		start(editor, gvim, arg0, arg1, arg2, arg3);
+		//build args-array (dynamic size due to addopts.split)
+		String[] args = new String[5+addopts.length];
+		args[0] = gvim;
+		args[1] = netbeans;
+		args[2] = dontfork;
+		args[3] = socketid;
+		args[4] = stringwid;
+
+		//copy addopts to args
+		System.arraycopy(addopts, 0, args, 5, addopts.length);
+		
+		start(editor, args);
 	}
 
 	public void start(AbstractVimEditor editor, String... args) {
