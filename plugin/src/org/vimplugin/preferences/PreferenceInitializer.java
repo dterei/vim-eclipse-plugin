@@ -10,6 +10,7 @@
  */
 package org.vimplugin.preferences;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -29,7 +30,15 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_PORT, 3219);
 		store.setDefault(PreferenceConstants.P_HOST, "localhost");
 		store.setDefault(PreferenceConstants.P_PASS, "changeme");
-		store.setDefault(PreferenceConstants.P_GVIM, "/usr/bin/gvim");
+
+		//Platform specific code
+		if( Platform.getOS().equals(Platform.OS_WIN32) ) {
+			store.setDefault(PreferenceConstants.P_GVIM, "");
+		} else if( Platform.getOS().equals(Platform.OS_LINUX) ) {
+			store.setDefault(PreferenceConstants.P_GVIM, "/usr/bin/gvim");
+		}  
+
+		store.setDefault(PreferenceConstants.P_OPTS, "");
 		store.setDefault(PreferenceConstants.P_EMBD, false);
 	}
 

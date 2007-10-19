@@ -42,7 +42,7 @@ import org.vimplugin.utils.WidHandler;
 /**
  * Provides an Editor to Eclipse which is backed by a Vim instance. This class
  * must be initialised through one of the two subclasses {@link VimEditor} or
- * {@link VimEditorNewWindow}.
+ * {@link VimEditorNewProcess}.
  * 
  */
 public class AbstractVimEditor extends TextEditor {

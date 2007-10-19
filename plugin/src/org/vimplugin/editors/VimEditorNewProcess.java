@@ -17,9 +17,9 @@ import org.vimplugin.VimPlugin;
  * called.
  * 
  */
-public class VimEditorNewWindow extends AbstractVimEditor {
+public class VimEditorNewProcess extends AbstractVimEditor {
 	
-	public VimEditorNewWindow() {
+	public VimEditorNewProcess() {
 		super();
 		serverID = VimPlugin.getDefault().createVimServer();
 	}

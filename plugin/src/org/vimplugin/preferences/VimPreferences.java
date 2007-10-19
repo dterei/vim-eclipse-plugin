@@ -49,6 +49,8 @@ public class VimPreferences extends FieldEditorPreferencePage implements
 				getFieldEditorParent()));
 		addField(new FileFieldEditor(PreferenceConstants.P_GVIM,
 				"Path to gvim:", true, getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_OPTS,
+				"additional Parameters:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_KEY,
 				"Hot Keys (not yet ready)", getFieldEditorParent()));
 	}
