@@ -22,7 +22,7 @@ import org.vimplugin.preferences.PreferenceConstants;
  */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
 	 */
 	public void initializeDefaultPreferences() {
@@ -35,10 +35,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		if( Platform.getOS().equals(Platform.OS_WIN32) ) {
 			store.setDefault(PreferenceConstants.P_GVIM, "");
 		} else if( Platform.getOS().equals(Platform.OS_LINUX) ) {
-			store.setDefault(PreferenceConstants.P_GVIM, "/usr/bin/gvim");
+			store.setDefault(PreferenceConstants.P_GVIM, "");
 		}  
 
 		store.setDefault(PreferenceConstants.P_OPTS, "");
+		store.setDefault(PreferenceConstants.P_DEBUG, true);
 		store.setDefault(PreferenceConstants.P_EMBD, false);
 	}
 

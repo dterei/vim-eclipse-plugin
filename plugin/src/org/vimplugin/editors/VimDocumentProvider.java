@@ -16,7 +16,7 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 
 public class VimDocumentProvider extends FileDocumentProvider {
 
-	public IDocument document;
+	private IDocument document;
 
 	protected IDocument createDocument(Object element) throws CoreException {
 		document = super.createDocument(element);

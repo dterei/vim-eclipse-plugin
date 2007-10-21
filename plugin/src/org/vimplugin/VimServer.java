@@ -11,7 +11,6 @@
 package org.vimplugin;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import org.eclipse.core.runtime.Platform;
@@ -32,7 +31,7 @@ public class VimServer {
 	/**
 	 * The editors associated with the vim instance. For same window opening.
 	 */
-	public HashSet<AbstractVimEditor> editors = new HashSet<AbstractVimEditor>();
+	private HashSet<AbstractVimEditor> editors = new HashSet<AbstractVimEditor>();
 
 	/**
 	 * Initialise the class.
@@ -114,6 +113,7 @@ public class VimServer {
 		//gather Strings (nice names for readbility)
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
 				PreferenceConstants.P_GVIM);
+		
 		String netbeans = getNetbeansString(ID);
 		String dontfork = "-f"; // foreground -- dont fork
 
@@ -186,6 +186,20 @@ public class VimServer {
 		t.interrupt();
 		p.destroy();
 		return result;
+	}
+
+	/**
+	 * @param editors the editors to set
+	 */
+	public void setEditors(HashSet<AbstractVimEditor> editors) {
+		this.editors = editors;
+	}
+
+	/**
+	 * @return the editors
+	 */
+	public HashSet<AbstractVimEditor> getEditors() {
+		return editors;
 	}
 
 }

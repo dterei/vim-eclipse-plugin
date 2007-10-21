@@ -52,7 +52,9 @@ public class VimPreferences extends FieldEditorPreferencePage implements
 		addField(new StringFieldEditor(PreferenceConstants.P_OPTS,
 				"additional Parameters:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_KEY,
-				"Hot Keys (not yet ready)", getFieldEditorParent()));
+				"Hot Keys (not yet ready):", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_DEBUG,
+				"Debug to stdout:", getFieldEditorParent()));
 	}
 
 	/*

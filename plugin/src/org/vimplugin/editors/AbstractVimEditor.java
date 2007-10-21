@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -47,15 +48,17 @@ import org.vimplugin.utils.WidHandler;
  */
 public class AbstractVimEditor extends TextEditor {
 
-	// ID of the VimServer.
+	/** ID of the VimServer. */
 	protected int serverID;
 
-	// Buffer ID in Vim instance.
-	public int bufferID;
+	/** Buffer ID in Vim instance. */
+	private int bufferID;
 
 	protected Canvas editorGUI;
 
-	// Document Instances..
+	/**
+	 * Document Instances
+	 */ 
 	protected IDocument document;
 
 	protected VimDocumentProvider documentProvider;
@@ -64,13 +67,17 @@ public class AbstractVimEditor extends TextEditor {
 
 	protected boolean alreadyClosed = false;
 
-	// Code suggesting Engine
-	public CompletionRequestor requestor;
+	/**
+	 *  Code suggesting Engine
+	 */
+	private CompletionRequestor requestor;
 
-	public IJavaProject iJavaProject;
+	private IJavaProject iJavaProject;
 
-	// Relative path to this file in the project
-	public IPath pathToTheFile;
+	/** 
+	 * Relative path to this file in the project
+	 */
+	private IPath pathToTheFile;
 
 	/**
 	 * The constructor.
@@ -93,6 +100,8 @@ public class AbstractVimEditor extends TextEditor {
 	 */
 	public void createPartControl(Composite parent) {
 		if (!gvimAvailable()) {
+			
+			MessageDialog.openError(parent.getShell(), "Vimplugin", "The gvim executable seems to be not available. Please check the path in Vimplugin-References.");
 			//TODO: handle nicer.
 			close(false);
 			return;
@@ -113,7 +122,9 @@ public class AbstractVimEditor extends TextEditor {
 		pathToTheFile = selectedFile.getProjectRelativePath();
 		iJavaProject = JavaCore.create(selectedFile.getProject());
 		String absolutpath = selectedFile.getRawLocation().toPortableString();
-		bufferID = VimPlugin.getDefault().numberOfBuffers++;
+		bufferID = VimPlugin.getDefault().getNumberOfBuffers();
+		bufferID++;
+		VimPlugin.getDefault().setNumberOfBuffers(bufferID);
 		VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
 				"editFile", "\"" + absolutpath + "\"");
 	}
@@ -200,6 +211,7 @@ public class AbstractVimEditor extends TextEditor {
 	public void dispose() {
 		System.out.println("dispose()");
 		// TODO: calling close ourselves here doesn't seem right.
+		// Note: this close raises NPE if gvim is not available. why is it needed?
 		close(true);
 
 		if (editorGUI != null) {
@@ -229,7 +241,7 @@ public class AbstractVimEditor extends TextEditor {
 		}
 
 		alreadyClosed = true;
-		VimPlugin.getDefault().getVimserver(serverID).editors.remove(this);
+		VimPlugin.getDefault().getVimserver(serverID).getEditors().remove(this);
 
 		try {
 			if (save && dirty) {
@@ -239,7 +251,7 @@ public class AbstractVimEditor extends TextEditor {
 				firePropertyChange(PROP_DIRTY);
 			}
 
-			if (VimPlugin.getDefault().getVimserver(serverID).editors.size() > 0) {
+			if (VimPlugin.getDefault().getVimserver(serverID).getEditors().size() > 0) {
 				VimPlugin.getDefault().getVimserver(serverID).getVc().command(
 						bufferID, "close", "");
 			} else {
@@ -472,5 +484,26 @@ public class AbstractVimEditor extends TextEditor {
 			//TODO: better exception handling
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return the bufferID
+	 */
+	public int getBufferID() {
+		return bufferID;
+	}
+
+	/**
+	 * @param requestor the requestor to set
+	 */
+	public void setRequestor(CompletionRequestor requestor) {
+		this.requestor = requestor;
+	}
+
+	/**
+	 * @return the requestor
+	 */
+	public CompletionRequestor getRequestor() {
+		return requestor;
 	}
 }

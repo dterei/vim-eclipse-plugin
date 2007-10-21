@@ -64,14 +64,14 @@ public class VimConnection implements Runnable {
 	}
 
 	public void command(int bufID, String name, String param) {
-		int seqno = VimPlugin.getDefault().SeqNo++;
+		int seqno = VimPlugin.getDefault().nextSeqNo();
 		String tmp = bufID + ":" + name + "!" + seqno + " " + param;
 		out.println(tmp);
 	}
 
 	public String function(int bufID, String name, String param)
 			throws IOException {
-		int seqno = VimPlugin.getDefault().SeqNo++;
+		int seqno = VimPlugin.getDefault().nextSeqNo();
 		String tmp = bufID + ":" + name + "/" + seqno + " " + param;
 		out.println(tmp);
 		try {
@@ -131,11 +131,13 @@ public class VimConnection implements Runnable {
 	//TODO simplify this long method?
 	private void addListeners() {
 		// DEBUG: write all Events to console
-		listeners.add(new VimListener(this) {
-			public void handleEvent(VimEvent ve) {
-				System.out.println(ve.getLine());
-			}
-		});
+		if (VimPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_DEBUG)) {
+			listeners.add(new VimListener(this) {
+				public void handleEvent(VimEvent ve) {
+					System.out.println(ve.getLine());
+				}
+			});
+		}
 
 		// Fires server started event
 		listeners.add(new VimListener(this) {
@@ -156,7 +158,7 @@ public class VimConnection implements Runnable {
 						|| event.equals("killed") == true) {
 					try {
 						for (final AbstractVimEditor veditor : VimPlugin.getDefault()
-								.getVimserver(vimID).editors) {
+								.getVimserver(vimID).getEditors()) {
 							if (veditor != null) {
 								veditor.forceDispose();
 							}
@@ -183,8 +185,8 @@ public class VimConnection implements Runnable {
 					String text = ve.getArgument(1);
 					text = text.substring(1, text.length() - 1);
 					for (AbstractVimEditor veditor : VimPlugin.getDefault()
-							.getVimserver(vimID).editors) {
-						if (veditor.bufferID == ve.getBufferID()) {
+							.getVimserver(vimID).getEditors()) {
+						if (veditor.getBufferID() == ve.getBufferID()) {
 							veditor.insertDocumentText(text, length);
 						}
 					}
@@ -200,8 +202,8 @@ public class VimConnection implements Runnable {
 					int offset = Integer.parseInt(ve.getArgument(0));
 					int length = Integer.parseInt(ve.getArgument(1));
 					for (AbstractVimEditor veditor : VimPlugin.getDefault()
-							.getVimserver(vimID).editors) {
-						if (veditor.bufferID == ve.getBufferID()) {
+							.getVimserver(vimID).getEditors()) {
+						if (veditor.getBufferID() == ve.getBufferID()) {
 							veditor.removeDocumentText(offset, length);
 						}
 					}
@@ -216,10 +218,10 @@ public class VimConnection implements Runnable {
 				if (event.equals("fileOpened") == true) {
 					String filePath = ve.getArgument(0);
 					filePath = filePath.substring(1, filePath.length() - 1);
-					int ID = VimPlugin.getDefault().numberOfBuffers - 1;
+					int ID = VimPlugin.getDefault().getNumberOfBuffers() - 1;
 					for (AbstractVimEditor veditor : VimPlugin.getDefault()
-							.getVimserver(vimID).editors) {
-						if (veditor.bufferID == ID) {
+							.getVimserver(vimID).getEditors()) {
+						if (veditor.getBufferID() == ID) {
 							veditor.setTitleTo(filePath);
 						}
 					}
@@ -234,8 +236,8 @@ public class VimConnection implements Runnable {
 				if (event.equals("save") == true
 						|| event.equals("unmodified") == true) {
 					for (AbstractVimEditor veditor : VimPlugin.getDefault()
-							.getVimserver(vimID).editors) {
-						if (veditor.bufferID == ve.getBufferID())
+							.getVimserver(vimID).getEditors()) {
+						if (veditor.getBufferID() == ve.getBufferID())
 							veditor.setDirty(false);
 					}
 
@@ -252,8 +254,8 @@ public class VimConnection implements Runnable {
 					keySeq = keySeq.substring(1, keySeq.length() - 1);
 					String pos = ve.getArgument(1);
 					for (AbstractVimEditor veditor : VimPlugin.getDefault()
-							.getVimserver(vimID).editors) {
-						if (veditor.bufferID == ve.getBufferID())
+							.getVimserver(vimID).getEditors()) {
+						if (veditor.getBufferID() == ve.getBufferID())
 							veditor.fireKeyAction(keySeq, pos);
 					}
 

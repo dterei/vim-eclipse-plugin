@@ -55,19 +55,19 @@ public class VimPlugin extends AbstractUIPlugin {
 	/**
 	 * Counts number of instances of vimServerNewWindow
 	 */
-	public int nextServerID;
+	private int nextServerID;
 
 	/**
 	 * Counts number of total buffers opened so far. If we close one buffer this
 	 * value doesn't change.
 	 */
-	public int numberOfBuffers;
+	private int numberOfBuffers;
 
 	/**
 	 * Counts number of commands executed so far. Will be useful for checking
 	 * functions and replies
 	 */
-	public int SeqNo;
+	private int seqNo;
 
 	/**
 	 * Store all the vim instances using their id as the key.
@@ -146,7 +146,7 @@ public class VimPlugin extends AbstractUIPlugin {
 		super.start(context);
 		nextServerID = 1; // 0 is for the DEFAULT VimServer
 		numberOfBuffers = 1; // Vim starts buffer count from 1
-		SeqNo = 0;
+		seqNo = 0;
 	}
 
 	/*
@@ -157,5 +157,23 @@ public class VimPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
+	}
+
+	public int nextSeqNo() {
+		return seqNo++;
+	}
+	
+	/**
+	 * @param numberOfBuffers the numberOfBuffers to set
+	 */
+	public void setNumberOfBuffers(int numberOfBuffers) {
+		this.numberOfBuffers = numberOfBuffers;
+	}
+
+	/**
+	 * @return the numberOfBuffers
+	 */
+	public int getNumberOfBuffers() {
+		return numberOfBuffers;
 	}
 }

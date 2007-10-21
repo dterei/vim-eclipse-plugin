@@ -25,6 +25,8 @@ public class PreferenceConstants {
 
 	public static final String P_OPTS = "opts";
 
+	public static final String P_DEBUG = "debug";
+
 	public static final String P_KEY = "hotkey";
 	
 	public static final String P_EMBD = "embedded";

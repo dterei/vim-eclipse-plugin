@@ -10,8 +10,20 @@
  */
 package org.vimplugin;
 
+
+/**
+ * Resembles an event thrown by vim and caught by various listeners in vimplugin.
+ * 
+ */
+
+// TODO: Better Exception Handling: Catching an Ex. and return "Error" is not
+// the best way ... Perhaps introduce "VimException"?
+
 public class VimEvent {
 
+	/**
+	 * The complete line vim threw.
+	 */
 	private String line;
 
 	public VimEvent(String _line) {
@@ -19,10 +31,20 @@ public class VimEvent {
 		line = _line;
 	}
 
+	/**
+	 * The generic form of an event is: "bufID:name=123 arg1 arg2".
+	 * 
+	 * @return the original line vim threw.
+	 */
 	public String getLine() {
 		return line;
 	}
 
+	/**
+	 * The name of the event, as specified under :help netbeans.
+	 * 
+	 * @return the name of the event.
+	 */
 	public String getEvent() {
 		int beginIndex = line.indexOf(':');
 		int endIndex = line.indexOf('=');
@@ -33,25 +55,31 @@ public class VimEvent {
 		}
 	}
 
+	/**
+	 * the argument at the specified position (starting with 0)
+	 *  
+	 * @param index
+	 * @return the argument at the specified position.
+	 */
 	public String getArgument(int index) {
 		int i = 0;
 		int beginIndex = -1;
 		while (i <= index) {
-			beginIndex = line.indexOf(" ", beginIndex+1);
+			beginIndex = line.indexOf(" ", beginIndex + 1);
 			i++;
 		}
-		int endIndex=beginIndex;
-		if(line.charAt(beginIndex+1)=='"'){
-			while(true){
-				endIndex = line.indexOf(" ", endIndex+1);
-				if(endIndex==-1 || (line.charAt(endIndex-1)=='"' && beginIndex!=endIndex-2))
+		int endIndex = beginIndex;
+		if (line.charAt(beginIndex + 1) == '"') {
+			while (true) {
+				endIndex = line.indexOf(" ", endIndex + 1);
+				if (endIndex == -1
+						|| (line.charAt(endIndex - 1) == '"' && beginIndex != endIndex - 2))
 					break;
 			}
-		}
-		else
-			endIndex = line.indexOf(" ", beginIndex+1);		
+		} else
+			endIndex = line.indexOf(" ", beginIndex + 1);
 		if (endIndex == -1)
-			endIndex = line.length();		
+			endIndex = line.length();
 		try {
 			return line.substring(beginIndex + 1, endIndex);
 		} catch (Exception e) {
@@ -60,6 +88,12 @@ public class VimEvent {
 
 	}
 
+	/**
+	 * the bufferID. This is set by vimplugin. It is not the vim-buffer! budIDs
+	 * start with one. Generic events have bufId of 0.
+	 * 
+	 * @return the bufferID of this event.
+	 */
 	public int getBufferID() {
 		int beginIndex = line.indexOf(':');
 		try {
