@@ -92,12 +92,12 @@ public class VimServer {
 	 * @param editor
 	 *            The editor to associate it with
 	 */
-	public void start(AbstractVimEditor editor) {
+	public void start() {
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
 				PreferenceConstants.P_GVIM);
 		String arg0 = getNetbeansString(ID);
 
-		start(editor, gvim, arg0);
+		start(gvim, arg0);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class VimServer {
 	 * @param wid
 	 *            The id of the window to embed vim into
 	 */
-	public void start(AbstractVimEditor editor, int wid) {
+	public void start(int wid) {
 
 		//gather Strings (nice names for readbility)
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
@@ -139,11 +139,10 @@ public class VimServer {
 		//copy addopts to args
 		System.arraycopy(addopts, 0, args, 5, addopts.length);
 		
-		start(editor, args);
+		start(args);
 	}
 
-	public void start(AbstractVimEditor editor, String... args) {
-		editors.add(editor);
+	public void start(String... args) {
 		if (vc != null && vc.isServerRunning())
 			return;
 

@@ -58,7 +58,7 @@ public class AbstractVimEditor extends TextEditor {
 
 	/**
 	 * Document Instances
-	 */ 
+	 */
 	protected IDocument document;
 
 	protected VimDocumentProvider documentProvider;
@@ -68,13 +68,13 @@ public class AbstractVimEditor extends TextEditor {
 	protected boolean alreadyClosed = false;
 
 	/**
-	 *  Code suggesting Engine
+	 * Code suggesting Engine
 	 */
 	private CompletionRequestor requestor;
 
 	private IJavaProject iJavaProject;
 
-	/** 
+	/**
 	 * Relative path to this file in the project
 	 */
 	private IPath pathToTheFile;
@@ -100,14 +100,18 @@ public class AbstractVimEditor extends TextEditor {
 	 */
 	public void createPartControl(Composite parent) {
 		if (!gvimAvailable()) {
-			
-			MessageDialog.openError(parent.getShell(), "Vimplugin", "The gvim executable seems to be not available. Please check the path in Vimplugin-References.");
-			//TODO: handle nicer.
+
+			MessageDialog
+					.openError(
+							parent.getShell(),
+							"Vimplugin",
+							"The gvim executable seems to be not available. Please check the path in Vimplugin-References.");
+			// TODO: handle nicer.
 			close(false);
 			return;
 		}
-		
-		//TODO: If external nicer display in Eclipse.
+
+		// TODO: If external nicer display in Eclipse.
 		editorGUI = new Canvas(parent, SWT.EMBEDDED);
 		Color color = new Color(parent.getDisplay(), new RGB(0x10, 0x10, 0x10));
 		editorGUI.setBackground(color);
@@ -142,6 +146,7 @@ public class AbstractVimEditor extends TextEditor {
 		} else {
 			createExternalVim(parent);
 		}
+		VimPlugin.getDefault().getVimserver(serverID).getEditors().add(this);
 	}
 
 	/**
@@ -150,7 +155,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * @param parent
 	 */
 	private void createExternalVim(Composite parent) {
-		VimPlugin.getDefault().getVimserver(serverID).start(this);
+		VimPlugin.getDefault().getVimserver(serverID).start();
 	}
 
 	/**
@@ -161,11 +166,11 @@ public class AbstractVimEditor extends TextEditor {
 	private void createEmbeddedVim(Composite parent) {
 		int wid = WidHandler.getWID(parent);
 		if (wid == WidHandler.WID_ERROR) {
-			//TODO: handle error.
+			// TODO: handle error.
 		}
 		int h = parent.getClientArea().height;
 		int w = parent.getClientArea().width;
-		VimPlugin.getDefault().getVimserver(serverID).start(this, wid);
+		VimPlugin.getDefault().getVimserver(serverID).start(wid);
 		VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
 				"setLocAndSize", h + " " + w);
 	}
@@ -189,7 +194,7 @@ public class AbstractVimEditor extends TextEditor {
 	 */
 	public void forceDispose() {
 		final AbstractVimEditor vime = this;
-		Display display= getSite().getShell().getDisplay();
+		Display display = getSite().getShell().getDisplay();
 		display.asyncExec(new Runnable() {
 			public void run() {
 				if (vime != null && !vime.alreadyClosed) {
@@ -197,7 +202,7 @@ public class AbstractVimEditor extends TextEditor {
 					vime.showBusy(true);
 					vime.close(false);
 					getSite().getPage().closeEditor(vime, false);
-					//vime.alreadyClosed = true;
+					// vime.alreadyClosed = true;
 				}
 			}
 		});
@@ -211,7 +216,8 @@ public class AbstractVimEditor extends TextEditor {
 	public void dispose() {
 		System.out.println("dispose()");
 		// TODO: calling close ourselves here doesn't seem right.
-		// Note: this close raises NPE if gvim is not available. why is it needed?
+		// Note: this close raises NPE if gvim is not available. why is it
+		// needed?
 		close(true);
 
 		if (editorGUI != null) {
@@ -251,7 +257,8 @@ public class AbstractVimEditor extends TextEditor {
 				firePropertyChange(PROP_DIRTY);
 			}
 
-			if (VimPlugin.getDefault().getVimserver(serverID).getEditors().size() > 0) {
+			if (VimPlugin.getDefault().getVimserver(serverID).getEditors()
+					.size() > 0) {
 				VimPlugin.getDefault().getVimserver(serverID).getVc().command(
 						bufferID, "close", "");
 			} else {
@@ -260,7 +267,7 @@ public class AbstractVimEditor extends TextEditor {
 				VimPlugin.getDefault().stopVimServer(serverID);
 			}
 		} catch (Exception e) {
-			//TODO: better exception handling
+			// TODO: better exception handling
 			e.printStackTrace();
 		}
 
@@ -312,7 +319,7 @@ public class AbstractVimEditor extends TextEditor {
 		try {
 			document = documentProvider.createDocument(input);
 		} catch (Exception e) {
-			//TODO: better exception handling
+			// TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -349,7 +356,7 @@ public class AbstractVimEditor extends TextEditor {
 	/**
 	 * According to the given <code>KeySeq</code> executes the actions..
 	 * 
-	 * @param keySeq The key sequence pressed. 
+	 * @param keySeq The key sequence pressed.
 	 * @param pos The position of the cursor in the text file.
 	 */
 	public void fireKeyAction(String keySeq, String pos) {
@@ -408,8 +415,7 @@ public class AbstractVimEditor extends TextEditor {
 	}
 
 	/**
-	 * Inserts text into document 
-	 * FIXME Not working properly.. both
+	 * Inserts text into document FIXME Not working properly.. both
 	 * insertDocument and removeDocument have some implementation problems..
 	 * 
 	 * @param text The text to insert.
@@ -430,7 +436,7 @@ public class AbstractVimEditor extends TextEditor {
 			setDirty(true);
 			System.out.println(first);
 		} catch (Exception e) {
-			//TODO: better exception handling
+			// TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -452,7 +458,7 @@ public class AbstractVimEditor extends TextEditor {
 			document.set(first);
 			setDirty(true);
 		} catch (Exception e) {
-			//TODO: better exception handling
+			// TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
@@ -481,7 +487,7 @@ public class AbstractVimEditor extends TextEditor {
 				test.codeComplete(position, requestor);
 			}
 		} catch (Exception e) {
-			//TODO: better exception handling
+			// TODO: better exception handling
 			e.printStackTrace();
 		}
 	}
