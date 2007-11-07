@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!-- ===================================================================== -->
+<!-- Vimplugin                                                             -->
+<!-- Author: David Terei                                                   -->
+<!-- Ant 1.7.0 build file                                                  -->
+<!-- Version: 1                                                            -->
+<!-- ===================================================================== -->
+
+<project name="Vimplugin" default="compile" basedir=".">
+	
+	<!-- Allow user to override properties without editing this file -->
+  <property file="vimplugin.properties"/>
+	<property file="${user.home}/.ant.properties"/>
+  <property file="build.properties"/>
+  <property file="META-INF/MANIFEST.MF"/>
+  
+  <!-- directories -->
+  <property name="dir.src" value="${source..}"/>
+	<property name="dir.bin" value="${output..}"/>
+  
+  <!-- plugin output file name -->
+  <property name="plugin.name" value="org.vimplugin.plugin"/>
+  <property name="plugin.build" value="testing"/>
+  
+  <!-- compile -->
+  <path id="project.classpath">
+    <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.*.jar"/>
+  </path>
+  <property name="debuglevel" value="source,lines,vars"/>
+  <property name="target" value="1.5"/>
+  <property name="source" value="1.5"/>
+  
+
+  <!-- ================================================================= -->
+	<!-- Init                                                              -->
+	<!-- ================================================================= -->
+	<target name="init" description="setups the build directory">
+		<echo>"Init ${ant.project.name}"</echo>
+    <mkdir dir="${dir.bin}"/>
+    <copy includeemptydirs="false" todir="${dir.bin}">
+      <fileset dir="${dir.src}" excludes="**/*.launch, **/*.testsuite, 
+          **/*.deploy, **/*.location, **/*.execution, **/*.datapool, 
+          **/*.artifact, **/*.html, **/*.svg, **/*.java"/>
+    </copy>
+	</target>
+  
+  
+	<!-- ================================================================= -->
+	<!-- Compile                                                           -->
+	<!-- ================================================================= -->
+	<target name="compile" depends="init"
+		description="Compiles the source code for the project">
+		<echo>"Compile ${ant.project.name}"</echo>
+    <javac debug="true" debuglevel="${debuglevel}" destdir="${dir.bin}" 
+        source="${source}" target="${target}">
+      <src path="${dir.src}"/>
+      <exclude name="**/.svn/"/>
+      <classpath refid="project.classpath"/>
+    </javac>
+	</target>
+
+
+	<!-- ================================================================= -->
+	<!-- Clean                                                             -->
+	<!-- ================================================================= -->
+	<target name="clean" description="Deletes the build directory">
+		<echo>"Clean the ${ant.project.name} build directory"</echo>
+		<delete includeemptydirs="true">
+			<fileset dir="${dir.bin}" includes="**/*"/>
+		</delete>
+	</target>
+
+
+	<!-- =================================================================== -->
+	<!-- Build                                                               -->
+	<!-- =================================================================== -->
+	<target name="build" depends="clean, compile"
+		description="Cleans the output directory and then compiles the project">
+		<echo>"Build ${ant.project.name}"</echo>
+	</target>
+	
+  
+  <!-- =================================================================== -->
+	<!-- Pack.Plugin                                                         -->
+	<!-- =================================================================== -->
+	<target name="pack.plugin" depends="compile"
+		description="Packages the plugin into a jar file">
+		<echo>"Creating Jar of ${ant.project.name}"</echo>
+    <jar destfile="${plugin.name}_${plugin.build}.jar"
+        manifest="META-INF/MANIFEST.MF">
+      <fileset dir="${basedir}" includes="${bin.includes}" 
+          excludes="${bin.excludes}"/>
+      <fileset dir="${dir.bin}"/>
+    </jar>
+	</target>
+  
+  
+  <!-- =================================================================== -->
+	<!-- Pack.Src                                                            -->
+	<!-- =================================================================== -->
+	<target name="pack.src"
+		description="Packages the plugin source code into a gzip file">
+		<echo>"Creating a Gzip of ${ant.project.name}'s source code"</echo>
+    <tar destfile="${plugin.name}_${plugin.build}-source.tar.gz" 
+        compression="gzip">
+      <fileset dir="${basedir}" includes="${src.includes}" 
+          excludes="${src.excludes}"/>
+    </tar>
+	</target>
+  
+  
+  <!-- =================================================================== -->
+	<!-- Install                                                             -->
+	<!-- =================================================================== -->
+	<target name="install" depends="pack.plugin"
+		description="installs the plugin into eclipse">
+    <echo>Installing ${ant.project.name} to Eclipse Install: ${ECLIPSE_HOME}</echo>
+    <copy file="${plugin.name}_${plugin.build}.jar"
+        todir="${ECLIPSE_HOME}/plugins"/>
+  </target>
+  
+  
+  <!-- =================================================================== -->
+	<!-- Clean.Install                                                       -->
+	<!-- =================================================================== -->
+	<target name="clean.install"
+		description="remove the plugin from eclipse">
+    <echo>Removing ${ant.project.name} from Eclipse Install: ${ECLIPSE_HOME}</echo>
+    <delete file="${ECLIPSE_HOME}/plugins/${plugin.name}_${plugin.build}.jar"/>
+  </target>
+  
+  
+  <!-- =================================================================== -->
+	<!-- Echo.Properties                                                     -->
+	<!-- =================================================================== -->
+	<target name="echo.properties"
+      description="used for testing the ant build script">
+    <echoproperties/>
+  </target>
+
+
+</project>
