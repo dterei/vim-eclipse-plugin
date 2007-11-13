@@ -43,7 +43,8 @@ import org.vimplugin.utils.WidHandler;
 /**
  * Provides an Editor to Eclipse which is backed by a Vim instance. This class
  * must be initialised through one of the two subclasses {@link VimEditor} or
- * {@link VimEditorNewProcess}.
+ * {@link VimEditorNewProcess}. These subclasses are needed to reference them 
+ * from the plugin.xml.
  * 
  */
 public class AbstractVimEditor extends TextEditor {
@@ -343,14 +344,31 @@ public class AbstractVimEditor extends TextEditor {
 	}
 
 	/**
-	 * Makes the present editor dirty.. means the IDE knows that file was
-	 * modified
+	 * Makes the present editor dirty. Thus the IDE knows that file was
+	 * modified. Asynchronous call of firePropertyChangeAsync.
 	 * 
 	 * @param result
 	 */
 	public void setDirty(boolean result) {
 		dirty = result;
-		firePropertyChange(PROP_DIRTY);
+
+		final AbstractVimEditor vime = this;
+		Display display = getSite().getShell().getDisplay();
+		display.asyncExec(new Runnable() {
+			public void run() {
+				vime.firePropertyChangeAsync(PROP_DIRTY);
+			}
+		});
+	}
+
+	/**
+	 * Needed to allow calls from asyncronous threads. Simply delegates to
+	 * super.firePropertyChange
+	 * 
+	 * @param prop the property to change
+	 */
+	public void firePropertyChangeAsync(int prop) {
+		super.firePropertyChange(prop);
 	}
 
 	/**
