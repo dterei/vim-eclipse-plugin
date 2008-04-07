@@ -23,10 +23,11 @@ import org.vimplugin.preferences.PreferenceConstants;
  * combined eventually to one class or at least reduced to very tiny class
  * which just extend this class in a trivial manner.
  * 
+ * @author Vim-Plugin-Team <http://vimplugin.org> 
  */
 public class VimServer {
 
-	private int ID;
+	private final int ID;
 
 	/**
 	 * The editors associated with the vim instance. For same window opening.

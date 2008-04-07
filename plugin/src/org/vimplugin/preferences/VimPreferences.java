@@ -20,6 +20,7 @@ import org.vimplugin.preferences.PreferenceConstants;
 /**
  * Vimplugin Vims Preference Page.
  * 
+ * @author Vim-Plugin-Team <http://vimplugin.org> 
  */
 public class VimPreferences extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
@@ -40,7 +41,7 @@ public class VimPreferences extends FieldEditorPreferencePage implements
 	 */
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(PreferenceConstants.P_EMBD,
-				"Embed Vim: (Linux Only)", getFieldEditorParent()));
+				"Embed Vim: (Vim 7.1 on Linux and Windows only)", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_PORT, "Port:",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_HOST, "Host:",
