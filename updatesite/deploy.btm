@@ -1,0 +1,38 @@
+::!
+
+@ECHO ON
+
+SETLOCAL
+    SET in_Version=%@If[%@Len[%[1]] != 0,%[1],0.3.2]
+    SET       USER=krischik
+    SET       SITE=%[USER]@vimplugin.sf.net:/home/groups/v/vi/vimplugin/htdocs/update
+    ALIAS      Zip=C:\Bin\7-ZipPortable\App\7-Zip\7z.exe
+
+    ON ERROR GOTO Catch
+
+	Zip a -tzip						^
+	    "features/org.vimplugin.feature_%[in_Version].jar"	^
+	    "features/org.vimplugin.feature_%[in_Version]"
+
+	Zip a -tzip						^
+	    "org.vimplugin.site_%[in_Version].jar"		^
+	    "features/org.vimplugin.feature_%[in_Version].jar"	^
+	    "plugins/org.vimplugin.plugin_%[in_Version].jar"	^
+	    "site.xml"
+
+	COPY "org.vimplugin.site_%[1].jar" "ftp://upload.sourceforge.net/incoming/"
+
+	scp "features/org.vimplugin.feature_%[in_Version].jar"	%[SITE]"/features"
+	scp "plugins/org.vimplugin.plugin_%[in_Version].jar"	%[SITE]"/plugins"
+	scp "site.xml"						%[SITE]
+
+	ECHO "OK!"
+    GOTO Exit
+
+    Catch:
+	ECHO "Error!"
+    Exit:
+ENDLOCAL
+
+::vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
+::vim: set textwidth=0 filetype=btm foldmethod=marker nospell :
