@@ -14,11 +14,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.*;
-
+import org.eclipse.ui.IActionDelegate;
+import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbenchPart;
 import org.vimplugin.VimPlugin;
 
-public class Open implements IObjectActionDelegate {
+public class Open implements org.eclipse.ui.IObjectActionDelegate {
 
 	private ISelection selection;
 
@@ -32,7 +33,7 @@ public class Open implements IObjectActionDelegate {
 	/**
 	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
 	 */
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {}
+	public void setActivePart(IAction action, org.eclipse.ui.IWorkbenchPart targetPart) {}
 
 	/**
 	 * @see IActionDelegate#run(IAction)

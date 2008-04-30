@@ -1,4 +1,28 @@
-::!
+::!"C:\Program Files\JPSoft\4NT8\4nt.exe"
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: {{{1 :::::::::::
+::  Copyright (C) 2005,2006  Martin Krischik (JavaME port)
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  This program is free software: you can redistribute it and/or modify
+::  it under the terms of the GNU General Public License as published by
+::  the Free Software Foundation, either version 3 of the License, or
+::  (at your option) any later version.
+::
+::  This program is distributed in the hope that it will be useful,
+::  but WITHOUT ANY WARRANTY; without even the implied warranty of
+::  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+::  GNU General Public License for more details.
+::
+::  You should have received a copy of the GNU General Public License
+::  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  $Author: krischik $
+::
+::  $Revision: 275 $
+::  $Date: 2008-04-29 19:29:17 +0200 (Di, 29 Apr 2008) $
+::
+::  $Id: Canvas.java 275 2008-04-29 17:29:17Z krischik $
+::  $HeadURL: $
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: }}}1 ::::::::::
 
 @ECHO ON
 
@@ -6,33 +30,29 @@ SETLOCAL
     SET in_Version=%@If[%@Len[%[1]] != 0,%[1],0.3.2]
     SET       USER=krischik
     SET       SITE=%[USER]@vimplugin.sf.net:/home/groups/v/vi/vimplugin/htdocs/update
-    ALIAS      Zip=C:\Bin\7-ZipPortable\App\7-Zip\7z.exe
+    ALIAS      Zip="C:\Program Files\7-Zip\7z.exe"
 
     ON ERROR GOTO Catch
+        Zip a -tzip                                             ^
+            "org.vimplugin_%[in_Version]_site.zip"             ^
+            "features/org.vimplugin.feature_%[in_Version].jar"  ^
+            "plugins/org.vimplugin.plugin_%[in_Version].jar"    ^
+            "site.xml"
 
-	Zip a -tzip						^
-	    "features/org.vimplugin.feature_%[in_Version].jar"	^
-	    "features/org.vimplugin.feature_%[in_Version]"
+        COPY "org.vimplugin_%[in_Version]_site.zip" "ftp://upload.sourceforge.net/incoming/"
 
-	Zip a -tzip						^
-	    "org.vimplugin.site_%[in_Version].jar"		^
-	    "features/org.vimplugin.feature_%[in_Version].jar"	^
-	    "plugins/org.vimplugin.plugin_%[in_Version].jar"	^
-	    "site.xml"
+        scp "features/org.vimplugin.feature_%[in_Version].jar"  %[SITE]"/features"
+        scp "plugins/org.vimplugin.plugin_%[in_Version].jar"    %[SITE]"/plugins"
+        scp "site.xml"                                          %[SITE]
 
-	COPY "org.vimplugin.site_%[1].jar" "ftp://upload.sourceforge.net/incoming/"
-
-	scp "features/org.vimplugin.feature_%[in_Version].jar"	%[SITE]"/features"
-	scp "plugins/org.vimplugin.plugin_%[in_Version].jar"	%[SITE]"/plugins"
-	scp "site.xml"						%[SITE]
-
-	ECHO "OK!"
+        ECHO "OK!"
     GOTO Exit
 
     Catch:
-	ECHO "Error!"
+        ECHO "Error!"
     Exit:
 ENDLOCAL
 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: {{{1 :::::::::::
 ::vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
 ::vim: set textwidth=0 filetype=btm foldmethod=marker nospell :
