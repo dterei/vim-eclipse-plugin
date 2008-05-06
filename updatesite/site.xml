@@ -3,10 +3,7 @@
    <description url="http://vimplugin.sf.net/update">
       Vimplugin
    </description>
-   <feature
-       url="features/org.vimplugin.feature_0.3.2.jar" 
-       id="org.vimplugin.feature" 
-       version="0.3.2">
+   <feature url="features/org.vimplugin.feature_0.3.3.jar" id="org.vimplugin.feature" version="0.3.3">
       <category name="Vimplugin"/>
    </feature>
    <category-def name="Vimplugin" label="Vimplugin"/>

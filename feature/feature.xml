@@ -2,7 +2,7 @@
 <feature
       id="org.vimplugin.feature"
       label="Vimplugin"
-      version="0.3.2"
+      version="0.3.3"
       provider-name="Vimplugin Project">
 
    <description url="http://vimplugin.org">
@@ -34,7 +34,7 @@ USA.
          id="org.vimplugin.plugin"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.3.3"
          unpack="false"/>
 
 </feature>
