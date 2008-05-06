@@ -109,7 +109,7 @@ public class VimServer {
 	 * @param wid
 	 *            The id of the window to embed vim into
 	 */
-	public void start(int wid) {
+	public void start(long wid) {
 
 		//gather Strings (nice names for readbility)
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
@@ -163,8 +163,16 @@ public class VimServer {
 		}
 
 		// Waits until server starts.. vim should return startupDone
-		while (!vc.isServerRunning())
-			;
+		while (!vc.isServerRunning()) {
+			// sleep so that we don't have a messy cpu-hogging infinite loop here
+			Long stoptime = 2000L; //2 Seconds
+			System.out.println("Waiting to connect to vim server…");
+			try {
+			Thread.sleep(stoptime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

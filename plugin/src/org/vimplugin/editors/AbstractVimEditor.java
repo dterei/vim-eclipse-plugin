@@ -88,6 +88,7 @@ public class AbstractVimEditor extends TextEditor {
 		bufferID = -1; // not really necessary but set it to an invalid buffer
 		setDocumentProvider(documentProvider = new VimDocumentProvider());
 		requestor = new CompletionRequestor() {
+			@Override
 			public void accept(CompletionProposal test) {
 				System.out.println(test.getCompletion());
 			}
@@ -99,6 +100,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * 
 	 * @see org.eclipse.ui.texteditor.AbstractDecoratedTextEditor#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public void createPartControl(Composite parent) {
 		if (!gvimAvailable()) {
 
@@ -165,7 +167,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * @param parent
 	 */
 	private void createEmbeddedVim(Composite parent) {
-		int wid = WidHandler.getWID(parent);
+		long wid = WidHandler.getWID(parent);
 		if (wid == WidHandler.WID_ERROR) {
 			// TODO: handle error.
 		}
@@ -214,6 +216,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * 
 	 * @see org.eclipse.ui.editors.text.TextEditor#dispose()
 	 */
+	@Override
 	public void dispose() {
 		System.out.println("dispose()");
 		// TODO: calling close ourselves here doesn't seem right.
@@ -240,6 +243,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * buffer is the last one the vim will be closed, else only the buffer will
 	 * be closed.
 	 */
+	@Override
 	public void close(boolean save) {
 		System.out.println("close( " + save + " );");
 		if (this.alreadyClosed) {
@@ -286,6 +290,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * We can't modify the file in the eclipse source viewer.. We use that only
 	 * for showing error messages...
 	 */
+	@Override
 	public boolean isEditable() {
 		return false;
 	}
@@ -295,6 +300,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * 
 	 * @see org.eclipse.ui.texteditor.AbstractTextEditor#doSave(org.eclipse.core.runtime.IProgressMonitor)
 	 */
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
 				"save", "");
@@ -306,6 +312,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * Since we have a copy of edited text in document, we can perform saveAs
 	 * operation
 	 */
+	@Override
 	public void doSaveAs() {
 		performSaveAs(null);
 	}
@@ -313,6 +320,7 @@ public class AbstractVimEditor extends TextEditor {
 	/**
 	 * Initialisation goes here..
 	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		setSite(site);
@@ -329,6 +337,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * Returns <code>true</code> if the file was modified, else return
 	 * <code>false</code>
 	 */
+	@Override
 	public boolean isDirty() {
 		if (alreadyClosed)
 			getSite().getPage().closeEditor(this, false);
@@ -339,6 +348,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * Returns <code>true</code> if save as is allowed, else return
 	 * <code>false</code>
 	 */
+	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
@@ -389,6 +399,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * Sets focus (brings to top in Vim) to the buffer.. this function will be
 	 * called when user activates this editor window
 	 */
+	@Override
 	public void setFocus() {
 		if (alreadyClosed) {
 			getSite().getPage().closeEditor(this, false);
@@ -418,6 +429,7 @@ public class AbstractVimEditor extends TextEditor {
 	/**
 	 * Returns the document provider
 	 */
+	@Override
 	public IDocumentProvider getDocumentProvider() {
 		return documentProvider;
 	}
@@ -486,6 +498,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * 
 	 * @see org.eclipse.ui.editors.text.TextEditor#createActions()
 	 */
+	@Override
 	protected void createActions() {
 		super.createActions();
 	}

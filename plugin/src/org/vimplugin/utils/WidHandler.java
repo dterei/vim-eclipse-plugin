@@ -52,13 +52,17 @@ public class WidHandler {
 	 * @param parent The SWT Widget.
 	 * @return The handle of the SWT Widget.
 	 */
-	public static int getWID(Composite parent) {
+	public static long getWID(Composite parent) {
 		Class<?> c = parent.getClass();
 		Field f = null;
 		
 		try {
-			if( Platform.getOS().equals(Platform.OS_LINUX) )			
-				f = c.getField(linuxWID);
+			if( Platform.getOS().equals(Platform.OS_LINUX) ) {			
+				//f = c.getField(linuxWID);
+				// the class reflection doesn't work on linux
+				// return the embeddedHandle 
+				return parent.embeddedHandle;
+			}
 			else if( Platform.getOS().equals(Platform.OS_WIN32) )
 				f = c.getField(win32WID);			
 			else {
@@ -77,6 +81,8 @@ public class WidHandler {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			//TODO: better exception handling
+			e.printStackTrace();
+		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
 		
