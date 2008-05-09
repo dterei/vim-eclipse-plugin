@@ -12,14 +12,14 @@ package org.vimplugin;
 
 public abstract class VimListener {
 
-	VimConnection vc;
+	protected VimConnection connection;
 
 	public VimListener() {
 
 	}
 
 	public VimListener(VimConnection parent) {
-		vc = parent;
+		connection = parent;
 	}
 
 	public abstract void handleEvent(VimEvent ve);
