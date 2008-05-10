@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -10,42 +10,41 @@
  */
 package org.vimplugin.listeners;
 
-import org.vimplugin.VimConnection;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimListener;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.editors.AbstractVimEditor;
 
 /**
- * Closes the editor window if the server was closed
- * @author menge
- *
+ * Closes the editor window if the server was closed.
  */
-public class ServerDisconnect extends VimListener {
+public class ServerDisconnect implements VimListener {
 
-	public ServerDisconnect(VimConnection connection) {
-		super(connection);
-	}
-
+	/**
+	 * Disposes the {@link org.vimplugin.editors.AbstractVimEditor ViMEditor} on
+	 * "disconnect" or killed.
+	 */
 	public void handleEvent(VimEvent ve) {
 		String event = ve.getEvent();
+
 		if (event.equals("disconnect") == true
 				|| event.equals("killed") == true) {
 			try {
 				for (final AbstractVimEditor veditor : VimPlugin.getDefault()
-						.getVimserver(connection.getVimID()).getEditors()) {
+						.getVimserver(ve.getConnection().getVimID())
+						.getEditors()) {
 					if (veditor != null) {
 						veditor.forceDispose();
 					}
 				}
 			} catch (Exception e) {
-				//TODO: better exception handling
+				// TODO: better exception handling
 				e.printStackTrace();
 			}
 			try {
-				connection.close();
+				ve.getConnection().close();
 			} catch (Exception e) {
-				//TODO: better exception handling
+				// TODO: better exception handling
 			}
 		}
 	}

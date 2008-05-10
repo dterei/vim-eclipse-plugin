@@ -1,7 +1,7 @@
 /*
- * Eeedit
+ * Vimplugin
  *
- * Copyright (c) 2007 by The Eeedit Project.
+ * Copyright (c) 2008 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -16,19 +16,18 @@ import org.vimplugin.VimListener;
 
 /**
  * Fires server started event.
- * @author menge
- *
  */
-public class ServerStarted extends VimListener {
-	public ServerStarted(VimConnection parent) {
-		super(parent);
-	}
+public class ServerStarted implements VimListener {
 
+	/**
+	 * initializes the {@link VimConnection VimConnection} on "startupDone".
+	 * @see org.vimplugin.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 */
 	public void handleEvent(VimEvent ve) {
 		String event = ve.getEvent();
 		if (event.equals("startupDone") == true) {
-			connection.setStartupDone(true);
-			connection.setServerRunning(true);
+			ve.getConnection().setStartupDone(true);
+			ve.getConnection().setServerRunning(true);
 		}
 	}
 }

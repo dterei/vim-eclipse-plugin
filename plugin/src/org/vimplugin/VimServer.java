@@ -90,8 +90,6 @@ public class VimServer {
 	/**
 	 * Start vim.
 	 * 
-	 * @param editor
-	 *            The editor to associate it with
 	 */
 	public void start() {
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
@@ -104,8 +102,6 @@ public class VimServer {
 	/**
 	 * Start vim and embed it in the Window with the <code>wid</code> given.
 	 * 
-	 * @param editor
-	 *            The editor to associate vim with
 	 * @param wid
 	 *            The id of the window to embed vim into
 	 */

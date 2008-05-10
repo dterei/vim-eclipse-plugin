@@ -19,7 +19,7 @@ import org.vimplugin.preferences.PreferenceConstants;
 
 /**
  * Vimplugin Preference Page. The fields are explained in
- * {@link org.vimplugin.PreferenceConstants PreferenceConstants}. The
+ * {@link org.vimplugin.preferences.PreferenceConstants PreferenceConstants}. The
  * preferecences have to be adjusted to the settings vim was started with (e.g.
  * 
  * <pre>

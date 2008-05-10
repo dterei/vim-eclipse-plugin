@@ -25,10 +25,14 @@ public class VimEvent {
 	 * The complete line vim threw.
 	 */
 	private String line;
+	
+	/** the connection this event came from */
+	private VimConnection connection;
 
-	public VimEvent(String _line) {
+	public VimEvent(String _line,VimConnection _connection) {
 		//TODO: pass at init? and store instead of at get methods.
 		line = _line;
+		connection = _connection;
 	}
 
 	/**
@@ -51,6 +55,7 @@ public class VimEvent {
 		try {
 			return line.substring(beginIndex + 1, endIndex);
 		} catch (Exception e) {
+			//TODO: Ouch, exception handling!
 			return "Sorry";
 		}
 	}
@@ -89,7 +94,7 @@ public class VimEvent {
 	}
 
 	/**
-	 * the bufferID. This is set by vimplugin. It is not the vim-buffer! budIDs
+	 * returns the bufferID. This is set by vimplugin. It is not the vim-buffer! budIDs
 	 * start with one. Generic events have bufId of 0.
 	 * 
 	 * @return the bufferID of this event.
@@ -101,6 +106,14 @@ public class VimEvent {
 		} catch (Exception e) {
 			return -1;
 		}
+	}
+
+	/**
+	 *  
+	 * @return the connection this event came from.
+	 */
+	public VimConnection getConnection() {
+		return connection;
 	}
 
 }

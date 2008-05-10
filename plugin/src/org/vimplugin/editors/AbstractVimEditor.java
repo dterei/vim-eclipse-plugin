@@ -11,10 +11,12 @@
 package org.vimplugin.editors;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.CompletionRequestor;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -38,12 +40,11 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.preferences.PreferenceConstants;
 import org.vimplugin.utils.UtilFunctions;
-import org.vimplugin.utils.WidHandler;
 
 /**
  * Provides an Editor to Eclipse which is backed by a Vim instance. This class
  * must be initialised through one of the two subclasses {@link VimEditor} or
- * {@link VimEditorNewProcess}. These subclasses are needed to reference them 
+ * {@link VimEditorNewProcess}. These subclasses are needed to reference them
  * from the plugin.xml.
  * 
  */
@@ -79,6 +80,16 @@ public class AbstractVimEditor extends TextEditor {
 	 * Relative path to this file in the project
 	 */
 	private IPath pathToTheFile;
+
+	/**
+	 * The field to grab for Windows/Win32.
+	 */
+	public static final String win32WID = "handle";
+
+	/**
+	 * The field to grab for Linux/GTK2.
+	 */
+	public static final String linuxWID = "embeddedHandle";
 
 	/**
 	 * The constructor.
@@ -162,15 +173,45 @@ public class AbstractVimEditor extends TextEditor {
 	}
 
 	/**
-	 * Create an embedded Vim instance.
+	 * Creates an embedded Vim instance (platform-dependent!). Gets the Window
+	 * ID/Handle of the SWT Widget given, uses reflection since the code is
+	 * platform specific and this allows us to distribute just one plugin for
+	 * all platforms.
 	 * 
 	 * @param parent
 	 */
 	private void createEmbeddedVim(Composite parent) {
-		long wid = WidHandler.getWID(parent);
-		if (wid == WidHandler.WID_ERROR) {
-			// TODO: handle error.
+		long wid = 0;
+
+		Class<?> c = parent.getClass();
+		Field f = null;
+
+		try {
+			if (Platform.getOS().equals(Platform.OS_LINUX)) {
+				f = c.getField(AbstractVimEditor.linuxWID);
+			} else if (Platform.getOS().equals(Platform.OS_WIN32)) {
+				f = c.getField(AbstractVimEditor.win32WID);
+			} else {
+				f = c.getField(AbstractVimEditor.win32WID);
+			}
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		try {
+			wid = f.getLong(parent);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		int h = parent.getClientArea().height;
 		int w = parent.getClientArea().width;
 		VimPlugin.getDefault().getVimserver(serverID).start(wid);
@@ -543,4 +584,5 @@ public class AbstractVimEditor extends TextEditor {
 	public CompletionRequestor getRequestor() {
 		return requestor;
 	}
+
 }

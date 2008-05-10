@@ -112,29 +112,28 @@ public class VimConnection implements Runnable {
 
 			// Add Listeners 
 			if (VimPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_DEBUG)) {
-				listeners.add(new Logger(this));
+				listeners.add(new Logger());
 			}
 
-
-			listeners.add(new ServerStarted(this));
-			listeners.add(new ServerDisconnect(this));
-			listeners.add(new TextInsert(this));
-			listeners.add(new TextRemoved(this));
-			listeners.add(new FileOpened(this));
-			listeners.add(new FileUnmodified(this));
-			listeners.add(new KeyCommand(this));
+			listeners.add(new ServerStarted());
+			listeners.add(new ServerDisconnect());
+			listeners.add(new TextInsert());
+			listeners.add(new TextRemoved());
+			listeners.add(new FileOpened());
+			listeners.add(new FileUnmodified());
+			listeners.add(new KeyCommand());
 			
 			// handle Events
 			String line;
 			while (!startupDone && (line = in.readLine()) != null) {
-				VimEvent ve = new VimEvent(line);
+				VimEvent ve = new VimEvent(line,this);
 				for (VimListener listener : listeners) {
 					listener.handleEvent(ve);
 				}
 			}
 			addSpecialKeys();
 			while ((serverRunning && (line = in.readLine()) != null)) {
-				VimEvent ve = new VimEvent(line);
+				VimEvent ve = new VimEvent(line,this);
 				for (VimListener listener : listeners) {
 					listener.handleEvent(ve);
 				}

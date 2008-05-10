@@ -1,22 +1,28 @@
+/*
+ * Vimplugin
+ *
+ * Copyright (c) 2008 by The Vimplugin Project.
+ *
+ * Released under the GNU General Public License
+ * with ABSOLUTELY NO WARRANTY.
+ *
+ * See the file COPYING for more information.
+ */
 package org.vimplugin.listeners;
 
-import org.vimplugin.VimConnection;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimListener;
 
 /**
- * DEBUG: write all Events to console
- * @author menge
- *
+ * Writes all events to standard out.
  */
+public class Logger implements VimListener {
 
-public class Logger extends VimListener {
-
-	public Logger(VimConnection vc) {
-		super(vc);
-	}
-	
-	@Override
+	/**
+	 * System.out.println(ve.getLine());
+	 * 
+	 * @see org.vimplugin.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 */
 	public void handleEvent(VimEvent ve) {
 		System.out.println(ve.getLine());
 	}
