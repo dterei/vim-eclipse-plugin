@@ -18,30 +18,36 @@ import org.vimplugin.VimPlugin;
 import org.vimplugin.preferences.PreferenceConstants;
 
 /**
- * Vimplugin Vims Preference Page.
+ * Vimplugin Preference Page. The fields are explained in
+ * {@link org.vimplugin.PreferenceConstants PreferenceConstants}. The
+ * preferecences have to be adjusted to the settings vim was started with (e.g.
  * 
- * @author Vim-Plugin-Team <http://vimplugin.org> 
+ * <pre>
+ * vim -nb:{hostname}:{addr}:{password}
+ * </pre> ).
  */
+
+// TODO: Move all strings to a properties file.
 public class VimPreferences extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
 	/**
-	 * Constructor
+	 * Initializes the preference store and sets a description for the dialog. 
 	 */
 	public VimPreferences() {
-		super(GRID);
+		super(FieldEditorPreferencePage.GRID);
 		setPreferenceStore(VimPlugin.getDefault().getPreferenceStore());
 		setDescription("General Settings");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
+	 * Adds the fields.
 	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
 	 */
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(PreferenceConstants.P_EMBD,
-				"Embed Vim: (Vim 7.1 on Linux and Windows only)", getFieldEditorParent()));
+				"Embed Vim: (Vim 7.1 on Linux and Windows only)",
+				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_PORT, "Port:",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_HOST, "Host:",
@@ -58,8 +64,8 @@ public class VimPreferences extends FieldEditorPreferencePage implements
 				"Debug to stdout:", getFieldEditorParent()));
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * does nothing.
 	 * 
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */

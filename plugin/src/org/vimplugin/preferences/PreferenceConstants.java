@@ -11,24 +11,33 @@
 package org.vimplugin.preferences;
 
 /**
- * Constant definitions for plug-in preferences
+ * Constant definitions for plug-in preferences. 
  */
 public class PreferenceConstants {
 
+	/** the port vim listens on */
 	public static final String P_PORT = "port";
 
+	/** the host vim runs on */
 	public static final String P_HOST = "host";
 
+	/** the password vim was started with */ 
 	public static final String P_PASS = "pass";
 
+	/** the path to gvim */
 	public static final String P_GVIM = "gvim";
 
+	/** additional startup options */
 	public static final String P_OPTS = "opts";
 
+	/** turn on debug to std-out */
 	public static final String P_DEBUG = "debug";
 
+	/** embed vim into eclipse */
+	public static final String P_EMBD = "embedded";
+
+	/** unsed feature ATM */
 	public static final String P_KEY = "hotkey";
 	
-	public static final String P_EMBD = "embedded";
 
 }

@@ -18,7 +18,7 @@ import org.vimplugin.VimPlugin;
 import org.vimplugin.preferences.PreferenceConstants;
 
 /**
- * Class used to initialize default preference values.
+ * Initializes default preference values.
  */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
