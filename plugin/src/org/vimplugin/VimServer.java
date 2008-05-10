@@ -22,8 +22,6 @@ import org.vimplugin.preferences.PreferenceConstants;
  * as possible so that VimServer and VimServerNewWindow can hopefully be
  * combined eventually to one class or at least reduced to very tiny class
  * which just extend this class in a trivial manner.
- * 
- * @author Vim-Plugin-Team <http://vimplugin.org> 
  */
 public class VimServer {
 
