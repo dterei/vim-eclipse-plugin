@@ -11,6 +11,7 @@
 package org.vimplugin.listeners;
 
 import org.vimplugin.VimEvent;
+import org.vimplugin.VimException;
 import org.vimplugin.VimListener;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.editors.AbstractVimEditor;
@@ -25,7 +26,7 @@ public class FileUnmodified implements VimListener {
 	 * 
 	 * @see org.vimplugin.VimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
-	public void handleEvent(VimEvent ve) {
+	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();
 		if (event.equals("save") == true || event.equals("unmodified") == true) {
 			for (AbstractVimEditor veditor : VimPlugin.getDefault()

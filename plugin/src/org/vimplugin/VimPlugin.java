@@ -10,8 +10,10 @@
  */
 package org.vimplugin;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -120,8 +122,14 @@ public class VimPlugin extends AbstractUIPlugin {
 	 * @return Success.
 	 */
 	public boolean stopVimServer(int id) {
-		boolean b = getVimserver(id).stop();
-		vimServers.remove(id);
+		boolean b = false;
+		try {
+			b = getVimserver(id).stop();
+			vimServers.remove(id);
+		} catch (IOException ioe) {
+			MessageDialog.openError(getWorkbench().getActiveWorkbenchWindow().getShell(), "Vimplugin", "VimServer to stop not found.");
+			ioe.printStackTrace();
+		}
 		return b;
 	}
 

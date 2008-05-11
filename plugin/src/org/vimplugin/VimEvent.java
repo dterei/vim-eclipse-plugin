@@ -10,15 +10,9 @@
  */
 package org.vimplugin;
 
-
 /**
  * Resembles an event thrown by vim and caught by various listeners in vimplugin.
- * 
  */
-
-// TODO: Better Exception Handling: Catching an Ex. and return "Error" is not
-// the best way ... Perhaps introduce "VimException"?
-
 public class VimEvent {
 
 	/** The complete line vim threw.  */
@@ -47,15 +41,15 @@ public class VimEvent {
 	 * The name of the event, as specified under :help netbeans.
 	 * 
 	 * @return the name of the event.
+	 * @throws VimException if the {@link #line line} cannot be parsed (wraps {@link IndexOutOfBoundsException})
 	 */
-	public String getEvent() {
+	public String getEvent() throws VimException {
 		int beginIndex = line.indexOf(':');
 		int endIndex = line.indexOf('=');
 		try {
 			return line.substring(beginIndex + 1, endIndex);
-		} catch (Exception e) {
-			//TODO: Ouch, exception handling!
-			return "Sorry";
+		} catch (IndexOutOfBoundsException iobe) {
+			throw new VimException("Could not parse line \""+line+"\"",iobe);
 		}
 	}
 
@@ -64,8 +58,9 @@ public class VimEvent {
 	 *  
 	 * @param index
 	 * @return the argument at the specified position.
+	 * @throws VimException if the {@link #line line} cannot be parsed (wraps {@link IndexOutOfBoundsException})
 	 */
-	public String getArgument(int index) {
+	public String getArgument(int index) throws VimException {
 		int i = 0;
 		int beginIndex = -1;
 		while (i <= index) {
@@ -86,8 +81,8 @@ public class VimEvent {
 			endIndex = line.length();
 		try {
 			return line.substring(beginIndex + 1, endIndex);
-		} catch (Exception e) {
-			return "Sorry";
+		} catch (IndexOutOfBoundsException iobe) {
+			throw new VimException("Could not parse line.",iobe);
 		}
 
 	}
@@ -97,13 +92,14 @@ public class VimEvent {
 	 * start with one. Generic events have bufId of 0.
 	 * 
 	 * @return the bufferID of this event.
+	 * @throws VimException if the number could not be parsed from the {@link #line line} (wraps {@link NumberFormatException})
 	 */
-	public int getBufferID() {
+	public int getBufferID() throws VimException {
 		int beginIndex = line.indexOf(':');
 		try {
 			return Integer.parseInt(line.substring(0, beginIndex));
-		} catch (Exception e) {
-			return -1;
+		} catch (NumberFormatException nfe) {
+			throw new VimException("Could not parse bufferId.",nfe);
 		}
 	}
 

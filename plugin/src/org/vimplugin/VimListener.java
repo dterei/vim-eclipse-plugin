@@ -27,7 +27,8 @@ public interface VimListener {
 	 * actions on it (like insterting text or similar ...).
 	 * 
 	 * @param ve the event we react to.
+	 * @throws VimException if anything goes wrong.
 	 */
-	public void handleEvent(VimEvent ve);
+	public void handleEvent(VimEvent ve) throws VimException;
 
 }

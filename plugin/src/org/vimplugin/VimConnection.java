@@ -110,23 +110,38 @@ public class VimConnection implements Runnable {
 
 			// handle Events
 			String line;
-			while (!startupDone && (line = in.readLine()) != null) {
-				VimEvent ve = new VimEvent(line, this);
-				for (VimListener listener : listeners) {
-					listener.handleEvent(ve);
+			
+			try {
+				while (!startupDone && (line = in.readLine()) != null) {
+					
+					//ignore "special messages" (see :help nb-special)
+					if (!line.startsWith("AUTH")) {
+						VimEvent ve = new VimEvent(line, this);
+						for (VimListener listener : listeners) {
+							listener.handleEvent(ve);
+						}
+					}
 				}
+			} catch (VimException ve) {
+				// TODO : better ErrorHandling (Connection Thread)
+				ve.printStackTrace();
 			}
 
 			addSpecialKeys();
 
-			while ((serverRunning && (line = in.readLine()) != null)) {
-				VimEvent ve = new VimEvent(line, this);
-				for (VimListener listener : listeners) {
-					listener.handleEvent(ve);
+			try {
+				while ((serverRunning && (line = in.readLine()) != null)) {
+					VimEvent ve = new VimEvent(line, this);
+					for (VimListener listener : listeners) {
+						listener.handleEvent(ve);
+					}
 				}
+			} catch (VimException ve) {
+				// TODO : better ErrorHandling (Connection Thread)
+				ve.printStackTrace();
 			}
 		} catch (IOException e) {
-			// TODO: better exception handling
+			// TODO: better ErrorHandling (Connection Thread)
 			e.printStackTrace();
 		}
 	}
@@ -167,6 +182,7 @@ public class VimConnection implements Runnable {
 	 * @param bufID the vim buffer that is adressed
 	 * @param name the "name" of the command
 	 * @param param possible parameters
+	 * @return the return value of the (vim)function or "goodbye" if the function was "saveAndExit".
 	 * @see <a
 	 *      href="http://www.vim.org/htmldoc/netbeans.html#netbeans-protocol">Protocol
 	 *      specification</a>
@@ -178,10 +194,14 @@ public class VimConnection implements Runnable {
 		out.println(tmp);
 		try {
 			tmp = in.readLine();
-		} catch (Exception e) {
-			// TODO: better exception handling
-		}// the function might be saveAndExit.. in such case we wont get any
+		} catch (IOException e) {
+			//TODO: Is this really intended?
+			//If yes, invent meaningful result:
+			tmp ="goodbye";
+		}
+		// the function might be saveAndExit.. in such case we wont get any
 		// response
+
 		return tmp;
 	}
 

@@ -11,6 +11,7 @@
 package org.vimplugin.listeners;
 
 import org.vimplugin.VimEvent;
+import org.vimplugin.VimException;
 import org.vimplugin.VimListener;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.editors.AbstractVimEditor;
@@ -27,7 +28,7 @@ public class KeyCommand implements VimListener {
 	 * @see org.vimplugin.VimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	// TODO: check whether "keyAtPos" and "keyCommand" are really the same...
-	public void handleEvent(VimEvent ve) {
+	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();
 		if (event.equals("keyAtPos") == true) {
 			String keySeq = ve.getArgument(0);

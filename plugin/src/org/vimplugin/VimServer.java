@@ -182,15 +182,10 @@ public class VimServer {
 	 * 
 	 * @return Success
 	 */
-	public boolean stop() {
+	public boolean stop() throws IOException {
 		boolean result = false; // If error raised
 
-		try {
-			result = vc.close();
-		} catch (IOException e) {
-			// TODO: better exception handling
-			e.printStackTrace();
-		}
+		result = vc.close();
 
 		vc = null;
 		t.interrupt();

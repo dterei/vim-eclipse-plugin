@@ -17,8 +17,9 @@ import java.util.HashMap;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.IParameter;
-import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 
 /**
  * Place all the global functions in this class
@@ -37,20 +38,21 @@ public final class UtilFunctions {
 	 * @return a static instance of this class
 	 */
 	public static UtilFunctions getDefault() {
-		if (functions == null) functions = new UtilFunctions(); 
+		if (functions == null)
+			functions = new UtilFunctions();
 		return functions;
 	}
 
 	/**
 	 * Hide constructor to force singleton.
 	 */
-	private UtilFunctions() {	}
+	private UtilFunctions() {
+	}
 
 	/**
 	 * Remove the backslashes from the given string.
 	 * 
-	 * @param text
-	 *            String to remove from
+	 * @param text String to remove from
 	 * @return The processed string
 	 */
 	public String removeBackSlashes(String text) {
@@ -77,8 +79,7 @@ public final class UtilFunctions {
 	/**
 	 * Gives FileName by taking the path
 	 * 
-	 * @param Path
-	 *            The path to a file
+	 * @param Path The path to a file
 	 * @return The filename from a path
 	 */
 	public String fileName(String Path) {
@@ -107,8 +108,7 @@ public final class UtilFunctions {
 	 * Helper method to execute a command with the given ID that has no
 	 * paramaters that need to be set.
 	 * 
-	 * @param ID
-	 *            The id of the command to execute
+	 * @param ID The id of the command to execute
 	 */
 	private void executeCommand(String ID) {
 		ICommandService com = (ICommandService) PlatformUI.getWorkbench()
@@ -120,7 +120,7 @@ public final class UtilFunctions {
 		try {
 			c.executeWithChecks(e);
 		} catch (Exception err) {
-			//TODO: better exception handling
+			//TODO: better ErrorHandling (when used again)
 			err.printStackTrace();
 		}
 	}
@@ -128,8 +128,7 @@ public final class UtilFunctions {
 	/**
 	 * Print Useful info about a command.
 	 * 
-	 * @param c
-	 *            The command
+	 * @param c The command
 	 */
 	@SuppressWarnings("unused")
 	private void printCommandInfo(Command c) {
@@ -152,7 +151,8 @@ public final class UtilFunctions {
 				System.out.println("OPTIONAL: " + p.isOptional());
 			}
 		} catch (Exception e) {
-			//TODO: better exception handling
+			// since this looks like debugging, just print the stacktrace in
+			// case of errors.
 			e.printStackTrace();
 		}
 	}

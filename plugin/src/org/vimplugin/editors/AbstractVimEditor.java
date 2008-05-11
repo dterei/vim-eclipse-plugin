@@ -11,6 +11,7 @@
 package org.vimplugin.editors;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.eclipse.core.resources.IFile;
@@ -23,7 +24,9 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -31,6 +34,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -90,7 +94,12 @@ public class AbstractVimEditor extends TextEditor {
 	 * The field to grab for Linux/GTK2.
 	 */
 	public static final String linuxWID = "embeddedHandle";
-
+	
+	/**
+	 * a shell to open {@link MessageDialog MessageDialogs}.
+	 */
+	private Shell shell;
+	
 	/**
 	 * The constructor.
 	 */
@@ -135,6 +144,7 @@ public class AbstractVimEditor extends TextEditor {
 
 		createVim(editorGUI);
 
+		shell = parent.getShell();
 		IFileEditorInput iei = (IFileEditorInput) getEditorInput();
 		IFile selectedFile = iei.getFile();
 		pathToTheFile = selectedFile.getProjectRelativePath();
@@ -156,7 +166,12 @@ public class AbstractVimEditor extends TextEditor {
 		boolean embd = VimPlugin.getDefault().getPreferenceStore().getBoolean(
 				PreferenceConstants.P_EMBD);
 		if (embd) {
-			createEmbeddedVim(parent);
+			try {
+				createEmbeddedVim(parent);
+			} catch (Exception e) {
+				message("Could not create embedded Widget. Falling back to ExternalVim. \n\n"+e.getMessage());
+				createExternalVim(parent);
+			}
 		} else {
 			createExternalVim(parent);
 		}
@@ -179,39 +194,27 @@ public class AbstractVimEditor extends TextEditor {
 	 * all platforms.
 	 * 
 	 * @param parent
+	 * @throws Exception 
 	 */
-	private void createEmbeddedVim(Composite parent) {
+	private void createEmbeddedVim(Composite parent) throws Exception {
 		long wid = 0;
 
 		Class<?> c = parent.getClass();
 		Field f = null;
 
-		try {
-			if (Platform.getOS().equals(Platform.OS_LINUX)) {
-				f = c.getField(AbstractVimEditor.linuxWID);
-			} else if (Platform.getOS().equals(Platform.OS_WIN32)) {
-				f = c.getField(AbstractVimEditor.win32WID);
-			} else {
-				f = c.getField(AbstractVimEditor.win32WID);
-			}
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (Platform.getOS().equals(Platform.OS_LINUX)) {
+			f = c.getField(AbstractVimEditor.linuxWID);
+		} else if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			f = c.getField(AbstractVimEditor.win32WID);
+		} else {
+			f = c.getField(AbstractVimEditor.win32WID);
 		}
-
-		try {
-			wid = f.getLong(parent);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		//Correct:
+		//wid = f.getLong(parent);
+		//BUG:
+		wid = f.getInt(parent);
+		
+		
 		int h = parent.getClientArea().height;
 		int w = parent.getClientArea().width;
 		VimPlugin.getDefault().getVimserver(serverID).start(wid);
@@ -284,7 +287,6 @@ public class AbstractVimEditor extends TextEditor {
 	 * buffer is the last one the vim will be closed, else only the buffer will
 	 * be closed.
 	 */
-	@Override
 	public void close(boolean save) {
 		System.out.println("close( " + save + " );");
 		if (this.alreadyClosed) {
@@ -295,26 +297,25 @@ public class AbstractVimEditor extends TextEditor {
 		alreadyClosed = true;
 		VimPlugin.getDefault().getVimserver(serverID).getEditors().remove(this);
 
-		try {
-			if (save && dirty) {
-				VimPlugin.getDefault().getVimserver(serverID).getVc().command(
-						bufferID, "save", "");
-				dirty = false;
-				firePropertyChange(PROP_DIRTY);
-			}
+		if (save && dirty) {
+			VimPlugin.getDefault().getVimserver(serverID).getVc().command(
+					bufferID, "save", "");
+			dirty = false;
+			firePropertyChange(PROP_DIRTY);
+		}
 
-			if (VimPlugin.getDefault().getVimserver(serverID).getEditors()
-					.size() > 0) {
-				VimPlugin.getDefault().getVimserver(serverID).getVc().command(
-						bufferID, "close", "");
-			} else {
+		if (VimPlugin.getDefault().getVimserver(serverID).getEditors().size() > 0) {
+			VimPlugin.getDefault().getVimserver(serverID).getVc().command(
+					bufferID, "close", "");
+		} else {
+			try {
 				VimPlugin.getDefault().getVimserver(serverID).getVc().function(
 						bufferID, "saveAndExit", "");
 				VimPlugin.getDefault().stopVimServer(serverID);
+			} catch (IOException e) {
+				message("Could not stop Server: \n\n"+e.getMessage());				
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			// TODO: better exception handling
-			e.printStackTrace();
 		}
 
 		super.close(false);
@@ -369,8 +370,7 @@ public class AbstractVimEditor extends TextEditor {
 		try {
 			document = documentProvider.createDocument(input);
 		} catch (Exception e) {
-			// TODO: better exception handling
-			e.printStackTrace();
+			message("Could not create Document:\n\n"+e.getMessage());
 		}
 	}
 
@@ -487,7 +487,8 @@ public class AbstractVimEditor extends TextEditor {
 
 	/**
 	 * Inserts text into document FIXME Not working properly.. both
-	 * insertDocument and removeDocument have some implementation problems..
+	 * insertDocument and removeDocument have some implementation problems.. 
+	 * TODO: More details please?
 	 * 
 	 * @param text The text to insert.
 	 * @param offset The offset to insert it at.
@@ -506,8 +507,8 @@ public class AbstractVimEditor extends TextEditor {
 			document.set(first);
 			setDirty(true);
 			System.out.println(first);
-		} catch (Exception e) {
-			// TODO: better exception handling
+		} catch (BadLocationException e) {
+			message("Could not insert text into document:"+e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -528,8 +529,8 @@ public class AbstractVimEditor extends TextEditor {
 			System.out.println(first);
 			document.set(first);
 			setDirty(true);
-		} catch (Exception e) {
-			// TODO: better exception handling
+		} catch (BadLocationException e) {
+			message("Could not remove text from document:"+e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -558,8 +559,8 @@ public class AbstractVimEditor extends TextEditor {
 				ICompilationUnit test = (ICompilationUnit) javaElement;
 				test.codeComplete(position, requestor);
 			}
-		} catch (Exception e) {
-			// TODO: better exception handling
+		} catch (JavaModelException e) {
+			message("Could not perform CodeCompletion: "+e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -583,6 +584,14 @@ public class AbstractVimEditor extends TextEditor {
 	 */
 	public CompletionRequestor getRequestor() {
 		return requestor;
+	}
+
+	/**
+	 * simple one-liner to display error-messages using {@link MessageDialog}.
+	 * @param s the string to display
+	 */
+	private void message(String s) {
+		MessageDialog.openError(shell,"Vimplugin",s);
 	}
 
 }
