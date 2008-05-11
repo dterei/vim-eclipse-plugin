@@ -27,7 +27,7 @@ public class VimServer {
 
 	/**
 	 * the id of this instance. IDs are counted in
-	 * {@link org.vimplugin.Vimplugin#nextServerID Vimplugin}.
+	 * {@link org.vimplugin.VimPlugin#nextServerID Vimplugin}.
 	 */
 	private final int ID;
 
