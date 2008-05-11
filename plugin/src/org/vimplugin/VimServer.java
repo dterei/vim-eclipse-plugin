@@ -18,13 +18,17 @@ import org.vimplugin.editors.AbstractVimEditor;
 import org.vimplugin.preferences.PreferenceConstants;
 
 /**
- * Abstract class that implements as much as of the Vim Server functions
- * as possible so that VimServer and VimServerNewWindow can hopefully be
- * combined eventually to one class or at least reduced to very tiny class
- * which just extend this class in a trivial manner.
+ * Abstract class that implements as much as of the Vim Server functions as
+ * possible so that VimServer and VimServerNewWindow can hopefully be combined
+ * eventually to one class or at least reduced to very tiny class which just
+ * extend this class in a trivial manner.
  */
 public class VimServer {
 
+	/**
+	 * the id of this instance. IDs are counted in
+	 * {@link org.vimplugin.Vimplugin#nextServerID Vimplugin}.
+	 */
 	private final int ID;
 
 	/**
@@ -41,10 +45,6 @@ public class VimServer {
 		ID = instanceID;
 	}
 
-	public int getInstanceID() {
-		return ID;
-	}
-	
 	/**
 	 * The Vim process.
 	 */
@@ -69,14 +69,16 @@ public class VimServer {
 	}
 
 	/**
-	 * Gives the vim argument with the port depending on the portID
-	 * @param portID 
+	 * Gives the vim argument with the port depending on the portID.
+	 * 
+	 * @param portID
 	 * @return The argument for vim for starting the Netbeans interface.
 	 */
 	protected String getNetbeansString(int portID) {
-		
+
 		int port = VimPlugin.getDefault().getPreferenceStore().getInt(
-				PreferenceConstants.P_PORT)+portID;
+				PreferenceConstants.P_PORT)
+				+ portID;
 		String host = VimPlugin.getDefault().getPreferenceStore().getString(
 				PreferenceConstants.P_HOST);
 		String pass = VimPlugin.getDefault().getPreferenceStore().getString(
@@ -84,9 +86,9 @@ public class VimServer {
 
 		return "-nb:" + host + ":" + port + ":" + pass;
 	}
-	
+
 	/**
-	 * Start vim.
+	 * Get netbeans-port,host and pass and start vim with -nb option.
 	 * 
 	 */
 	public void start() {
@@ -98,50 +100,55 @@ public class VimServer {
 	}
 
 	/**
-	 * Start vim and embed it in the Window with the <code>wid</code> given.
+	 * Start vim and embed it in the Window with the <code>wid</code> (platform-dependent!) given.
 	 * 
-	 * @param wid
-	 *            The id of the window to embed vim into
+	 * @param wid The id of the window to embed vim into
 	 */
 	public void start(long wid) {
 
-		//gather Strings (nice names for readbility)
+		// gather Strings (nice names for readbility)
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
 				PreferenceConstants.P_GVIM);
-		
+
 		String netbeans = getNetbeansString(ID);
 		String dontfork = "-f"; // foreground -- dont fork
 
-		//Platform specific code 
-		String socketid ="--socketid";
-		//use --windowid, under win32 
-		if( Platform.getOS().equals(Platform.OS_WIN32) ) {
+		// Platform specific code
+		String socketid = "--socketid";
+		// use --windowid, under win32
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 			socketid = "--windowid";
 		}
-			
+
 		String stringwid = String.valueOf(wid);
-		String[] addopts = VimPlugin.getDefault().getPreferenceStore().getString(
-				PreferenceConstants.P_OPTS).split("\\s");
-		
-		//build args-array (dynamic size due to addopts.split)
-		String[] args = new String[5+addopts.length];
+		String[] addopts = VimPlugin.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.P_OPTS).split("\\s");
+
+		// build args-array (dynamic size due to addopts.split)
+		String[] args = new String[5 + addopts.length];
 		args[0] = gvim;
 		args[1] = netbeans;
 		args[2] = dontfork;
 		args[3] = socketid;
 		args[4] = stringwid;
 
-		//copy addopts to args
+		// copy addopts to args
 		System.arraycopy(addopts, 0, args, 5, addopts.length);
-		
+
 		start(args);
 	}
 
+	/**
+	 * start gvim with args using a ProcessBuilder and setup
+	 * {@link #vc VimConnection} .
+	 * 
+	 * @param args
+	 */
 	public void start(String... args) {
 		if (vc != null && vc.isServerRunning())
 			return;
 
-		//setup VimConnection and start server thread
+		// setup VimConnection and start server thread
 		vc = new VimConnection(ID);
 		t = new Thread(vc);
 		t.setDaemon(true);
@@ -158,11 +165,12 @@ public class VimServer {
 
 		// Waits until server starts.. vim should return startupDone
 		while (!vc.isServerRunning()) {
-			// sleep so that we don't have a messy cpu-hogging infinite loop here
-			Long stoptime = 2000L; //2 Seconds
+			// sleep so that we don't have a messy cpu-hogging infinite loop
+			// here
+			Long stoptime = 2000L; // 2 Seconds
 			System.out.println("Waiting to connect to vim server…");
 			try {
-			Thread.sleep(stoptime);
+				Thread.sleep(stoptime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -180,7 +188,7 @@ public class VimServer {
 		try {
 			result = vc.close();
 		} catch (IOException e) {
-			//TODO: better exception handling
+			// TODO: better exception handling
 			e.printStackTrace();
 		}
 
@@ -191,6 +199,8 @@ public class VimServer {
 	}
 
 	/**
+	 * Simple setter.
+	 * 
 	 * @param editors the editors to set
 	 */
 	public void setEditors(HashSet<AbstractVimEditor> editors) {
@@ -198,6 +208,8 @@ public class VimServer {
 	}
 
 	/**
+	 * Simple getter.
+	 * 
 	 * @return the editors
 	 */
 	public HashSet<AbstractVimEditor> getEditors() {

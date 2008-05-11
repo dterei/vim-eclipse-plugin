@@ -21,14 +21,13 @@ package org.vimplugin;
 
 public class VimEvent {
 
-	/**
-	 * The complete line vim threw.
-	 */
+	/** The complete line vim threw.  */
 	private String line;
 	
 	/** the connection this event came from */
 	private VimConnection connection;
 
+	/** Simply sets both private attributes. */
 	public VimEvent(String _line,VimConnection _connection) {
 		//TODO: pass at init? and store instead of at get methods.
 		line = _line;
@@ -61,7 +60,7 @@ public class VimEvent {
 	}
 
 	/**
-	 * the argument at the specified position (starting with 0)
+	 * the argument at the specified position (starting with 0).
 	 *  
 	 * @param index
 	 * @return the argument at the specified position.
@@ -109,7 +108,7 @@ public class VimEvent {
 	}
 
 	/**
-	 *  
+	 * Simple Getter.
 	 * @return the connection this event came from.
 	 */
 	public VimConnection getConnection() {

@@ -27,7 +27,7 @@ import org.eclipse.ui.PlatformUI;
 public final class UtilFunctions {
 
 	/**
-	 * An instance of this class
+	 * The singleton instance of this class
 	 */
 	private static UtilFunctions functions;
 
@@ -37,15 +37,14 @@ public final class UtilFunctions {
 	 * @return a static instance of this class
 	 */
 	public static UtilFunctions getDefault() {
+		if (functions == null) functions = new UtilFunctions(); 
 		return functions;
 	}
 
 	/**
-	 * The constructor.
+	 * Hide constructor to force singleton.
 	 */
-	public UtilFunctions() {
-		functions = this;
-	}
+	private UtilFunctions() {	}
 
 	/**
 	 * Remove the backslashes from the given string.

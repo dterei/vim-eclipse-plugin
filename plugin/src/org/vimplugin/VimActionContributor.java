@@ -20,7 +20,7 @@ import org.vimplugin.actions.*;
 
 /**
  * Contributes interesting Java actions to the desktop's Edit menu and the tool
- * bar.
+ * bar. <i>TODO: develpment sleeps here. More work needed or delete it!</i>
  */
 public class VimActionContributor extends EditorActionBarContributor {
 

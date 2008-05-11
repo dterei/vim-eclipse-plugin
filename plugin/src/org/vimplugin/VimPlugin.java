@@ -15,7 +15,6 @@ import java.util.HashMap;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.vimplugin.utils.UtilFunctions;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -65,7 +64,7 @@ public class VimPlugin extends AbstractUIPlugin {
 
 	/**
 	 * Counts number of commands executed so far. Will be useful for checking
-	 * functions and replies
+	 * functions and replies.
 	 */
 	private int seqNo;
 
@@ -79,11 +78,10 @@ public class VimPlugin extends AbstractUIPlugin {
 	 */
 	public VimPlugin() {
 		plugin = this;
-		new UtilFunctions();
 	}
 
 	/**
-	 * Creates a {@link VimServer} for each open action
+	 * Creates a {@link VimServer} for each open action.
 	 * 
 	 * @return the server instance
 	 */
@@ -137,8 +135,8 @@ public class VimPlugin extends AbstractUIPlugin {
 		return vimServers.get(id);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * starts the plugin.
 	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
@@ -149,8 +147,8 @@ public class VimPlugin extends AbstractUIPlugin {
 		seqNo = 0;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * stop the plugin.
 	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
@@ -159,11 +157,16 @@ public class VimPlugin extends AbstractUIPlugin {
 		plugin = null;
 	}
 
+	/**
+	 * increment {@link #seqNo} by one.
+	 * @return the next sequence Number.
+	 */
 	public int nextSeqNo() {
 		return seqNo++;
 	}
 	
 	/**
+	 * Simple Setter.
 	 * @param numberOfBuffers the numberOfBuffers to set
 	 */
 	public void setNumberOfBuffers(int numberOfBuffers) {
@@ -171,6 +174,7 @@ public class VimPlugin extends AbstractUIPlugin {
 	}
 
 	/**
+	 * Simple Getter.
 	 * @return the numberOfBuffers
 	 */
 	public int getNumberOfBuffers() {
