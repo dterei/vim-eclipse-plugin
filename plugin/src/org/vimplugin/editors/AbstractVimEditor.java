@@ -209,11 +209,8 @@ public class AbstractVimEditor extends TextEditor {
 		} else {
 			f = c.getField(AbstractVimEditor.win32WID);
 		}
-		//Correct:
-		//wid = f.getLong(parent);
-		//BUG:
-		wid = f.getInt(parent);
-		
+
+		wid = f.getLong(parent);
 		
 		int h = parent.getClientArea().height;
 		int w = parent.getClientArea().width;
