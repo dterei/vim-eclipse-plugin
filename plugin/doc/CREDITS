@@ -3,17 +3,25 @@
 -------------------------------------------------------------------------------
 
     Vim
+
 Vim is a highly configurable text editor built to enable efficient text editing
 http://www.vim.org/
 By Bram Moolenaar et al.
 
 
-    Google Summer of Code
-This project benefitted a lot because David and Nageshwar were given the opportunity
-to work on an open source project for the summer and be paid for it out of their coffers. Thanks also to Bram for supporting and mentoring them.
+-------------------------------------------------------------------------------
 
-Check out SOC if you haven't before and if your
-a student then get involved in it if at all possible.
-http://code.google.com/p/eeedit/
-http://code.google.com/soc/
-By Google Inc.
+    Google Summer of Code
+
+This project benefitted a lot because David and Nageshwar were given the opportunity
+to work on an open source project for the summer and be paid for it out of their 
+coffers. Thanks also to Bram for supporting and mentoring them.
+
+Check out SOC if you haven't before and if your a student then get involved in it 
+if at all possible. see:
+  
+  http://code.google.com/p/eeedit/
+  http://code.google.com/soc/
+
+-------------------------------------------------------------------------------
+  

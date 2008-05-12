@@ -1,14 +1,7 @@
 update README
 update License to GPL 3 ?
-update Website
-use Issue-Tracker
-announce #vimplugin, CIA-Bot, http://cia.vc/stats/project/vimplugin
 
 check current state (technical)
   * Actions
-  * Popup-Actions
   * Tabs
   * Hotkeys
-  * suggest remove of NewWindow option
-  * platform-independence: win32 support
-  * use of public/protected/private

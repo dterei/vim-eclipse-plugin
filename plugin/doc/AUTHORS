@@ -1,7 +1,7 @@
 AUTHORS                                                                    -
 
-This work is collaborative work. To avoid private "territories" we should not use @author tags. 
-Instead, we list contributors and authors here.
+This work is collaborative work. To avoid private "territories" we do not use @author tags. 
+Instead, we list all contributors and authors here.
 
 For more information on this issue, please refer to 
 http://producingoss.com/en/managing-volunteers.html#territoriality
@@ -13,5 +13,6 @@ _____________________________
 
 Nageshwar M
 Sebastian Menge
+"mooseydoom"
 David Terei
 
