@@ -1,84 +1,65 @@
--------------------------------------------------------------------------------
--  Eeedit 0.2.2 README                                                        -
--------------------------------------------------------------------------------
+________________________________________________________________________________
 
-Eedit provides a way for external editors to be used by the Eclipse platform
-and be aware of eclipse and make use of its features That is it allows
-external editors to be tightly integrated into Eclipse. It does this through 
-the use of the Netbeans external editor protocol which defines a standard way
-for editors and IDE's to exchange information. This requires support for this
-protocol in the editor as well with currently Vim and XEmacs providing support
-for the protocol.
+                               Vimplugin README                                                        -
+________________________________________________________________________________
 
-Note though that at the moment as this project is in its very early stages
-only Vim is supported. Also while Eclipse supports a variety of languages
-these days, we only support Java at the moment.
+Vimplugin provides a way to use the editor Vim as a component inside the Eclipse
+platform and to make vim aware of eclipse to make use of its features. That is
+it allows Vim to be tightly integrated into Eclipse. It does this through the
+use of the Netbeans external editor protocol which defines a standard way for
+editors and IDE's to exchange information. 
+
+It is interesting to note that this protocol was originally invented to
+integrate Netbeans with Emacs :-) The "ExternalEditor" module for Netbeans is no
+longer supported, but rumours say that Emacs still has support, in theory(!) it
+could be used with eclipse in the same way as vim.
 
 The difference between using an editor that supports the protocol through this
 plugin compared to just using the usual external editor feature of Eclipse is
 that in the former situation the editor and Eclipse are partially aware of each
-other and integrated. This enables Eclipse to provide information to the 
-editor, such as compilation errors. It also allows greater interaction between
-the two at the user interface as Eclipse can issue commands to the editor such
-as 'go to this line in the file'. The usual external editor feature of Eclipse
-just provides a convenient way to launch your favorite editor. It in no way
+other and integrated. This enables Eclipse to provide information to the editor,
+such as compilation errors. It also allows greater interaction between the two
+at the user interface as Eclipse can issue commands to the editor such as 'go to
+this line in the file'. The usual external editor feature of Eclipse just
+provides a convenient way to launch your favorite editor. It in no way
 integrates them together.
 
-Project Web Site
-----------------
+But there is still a long way to go to implement a really tight integration.
 
-http://code.google.com/p/eeedit/
+________________
+
+Project Web Site
+________________
+
+Refer to http://vimplugin.org
 
 At the web site there is more information to help with setting up and using
-eeedit, if you have trouble then please head here as the documentation is
+Vimplugin, if you have trouble then please head there as the documentation is
 more detailed and includes screen shots.
 
+The web site is a wiki so you can register and contribute even if you dont want
+to work on the code directly!
+
+____________
 
 Requirements
-------------
+____________
 
  * Eclipse (Version 3.2 or later).
-An installation equivalent to the 'Classic' distribution (in Eclipse 3.3
-terms). This basically means the Eclipse SDK and Java Development tools.
+   - Eclipse SDK
+   - Eclipse JDT (this could go away some day)
  
  * Vim (Version 7.0 or later).
-Needs GVim built with it as well as support for the Netbeans protocol.
+   - For embedding on a Windows platform Version 7.1.139 or later
+   - Needs GVim built with it as well as support for the Netbeans protocol.
  
- 
-Installation
-------------
+  * Refer to docs on the website  on how to get started:
+   - http://vimplugin.org/installation
 
-To install the plugin just copy the 'plugins' folder into the Eclipse directory
-and start Eclipse.
-
-Setting Up
-----------
-
-First you have to tell Eclipse where your copy of Vim lives. Go to Eclipses
-preferences page and go to the Eedit preference page, tell it where your copy
-of the gvim executable is.
-
-Usage
------
-
-Open files like normal and they should open in vim. You can also right click on
-a file and then select the editor to open it with. Vim should appear in this
-list.
-
-Limitations
------------
-
-This project is in its very early stages and is not suitable for daily use,
-although we are very happy for you to try (just send us all the bug reports
-please).
-
- * Only support Vim at moment.
- * Only support Java (with Eclipse) at moment.
- * Very little integration of Eclipse and Vim. At the moment it nearly works
-   just like Eclipses standard external editor support.
+____
 
 Bugs
-----
+____
 
 We have not encountered any loss of data but be warned that we make no
 guarantee that it won't happen.
