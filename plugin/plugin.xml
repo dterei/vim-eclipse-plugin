@@ -45,35 +45,6 @@
             id="org.eeedit.vimplugin.editors.VimEditorNewWindow"
             name="Vim (new window)"/>            
    </extension>
-   <!--extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            objectClass="org.eclipse.core.resources.IFile"
-            id="vimplugin.contribution1"
-            nameFilter="*.java">            
-         <menu
-               label="Vim"
-               path="additions"
-               id="vimplugin.menu1">
-            <separator name="group1">
-            </separator>
-         </menu>
-         <action
-               label="open"
-               class="org.vim.vimplugin.popup.actions.Open"
-               enablesFor="1"
-               id="vimplugin.newAction"
-               menubarPath="vimplugin.menu1/group1">
-         </action>
-         <action
-               label="ShowLength"
-               class="org.vim.vimplugin.popup.actions.ShowBufferLength"
-               enablesFor="1"
-               id="vimplugin.newAction2"
-               menubarPath="vimplugin.menu1/group1">               
-         </action>
-      </objectContribution>
-   </extension-->
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
