@@ -1,0 +1,7 @@
+====== Test from scp!! ======
+
+Hello this page was pushed by an ant build file ...
+
+See the page [[props]] for the result of <echoproperties/> of this build ...
+
+This will be used to automate editing of certain docs on the wiki (version number etc). 

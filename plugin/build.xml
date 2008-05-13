@@ -21,9 +21,11 @@
 	<property name="dir.api" value="${basedir}/doc/api"/>
 	<property name="dir.updatesite" value="${basedir}/../updatesite"/>
 
-	<!-- connections -->
+	<!-- scp connections -->
+	<property name="www-user" value=""/>
 	<property name="www-host" value="vimplugin.org"/>
 	<property name="www-dir" value="/var/www/vhosts/vimplugin.org/dokuwiki"/>
+	<property name="update-user" value=""/>
 	<property name="update-host" value="vimplugin.sf.net"/>
 	<property name="update-dir" value="/home/groups/v/vi/vimplugin/htdocs/update"/>
 
@@ -153,6 +155,9 @@
 		<pde.exportPlugins destination="C:\Work\vimplugin\updatesite" exportSource="false" exportType="directory" plugins="org.vimplugin.plugin" useJARFormat="true"/>
 	</target>
 
+	<!-- =================================================================== -->
+	<!-- javaodc (platform dependet, use eclipse.home for classpath?)        -->
+	<!-- =================================================================== -->
 	<target name="javadoc">
 		<javadoc access="private" author="true" classpath="/usr/lib/eclipse/plugins/org.eclipse.swt.nl1_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.swt.nlBidi_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_64_3.2.2.v3236.jar:/usr/lib/eclipse/plugins/org.eclipse.jdt.core_3.2.3.v_686_R32x.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.registry.nl2_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.swt.nl2_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.core.filebuffers_3.2.1.r321_v20060721.jar:/usr/lib/eclipse/plugins/org.eclipse.swt_3.2.2.v3236b.jar:/usr/lib/eclipse/plugins/org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907/runtime_registry_compatibility.jar:/usr/lib/eclipse/plugins/org.eclipse.core.resources_3.2.2.R32x_v20061218.jar:/usr/lib/eclipse/plugins/org.eclipse.ui_3.2.1.M20061108.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.registry.nlBidi_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.osgi_3.2.2.R32x_v20070118.jar:/usr/lib/eclipse/plugins/org.eclipse.core.jobs_3.2.0.v20060603.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.registry.nl1_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.jface_3.2.2.M20061214-1200.jar:/usr/lib/eclipse/plugins/org.eclipse.jface.text_3.2.2.r322_v20070104.jar:/usr/lib/eclipse/plugins/org.eclipse.ui.editors_3.2.1.r321_v20060721.jar:/usr/lib/eclipse/plugins/org.eclipse.ui.ide_3.2.1.M20060915-1030.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.registry.nl2a_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.ui.workbench_3.2.2.M20070119-0800.jar:/usr/lib/eclipse/plugins/org.eclipse.core.contenttype_3.2.0.v20060603.jar:/usr/lib/eclipse/plugins/org.eclipse.text_3.2.0.v20060605-1400.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.common_3.2.0.v20060603.jar:/usr/lib/eclipse/plugins/org.eclipse.core.commands_3.2.0.I20060605-1400.jar:/usr/lib/eclipse/plugins/org.eclipse.core.runtime_3.2.0.v20060603.jar:/usr/lib/eclipse/plugins/org.eclipse.swt.nl2a_3.2.1.v200609270227.jar:/usr/lib/eclipse/plugins/org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar:/usr/lib/eclipse/plugins/org.eclipse.ui.workbench.texteditor_3.2.0.v20060605-1400.jar" destdir="doc/api" doctitle="Vimplugin API Reference" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="org.vimplugin.actions,org.vimplugin.preferences,org.vimplugin.utils,org.vimplugin.views,org.vimplugin.popup.actions,org.vimplugin.listeners,org.vimplugin,org.vimplugin.editors" source="1.6" sourcepath="src" splitindex="true" use="true" version="true" overview="src/overview.html">
 			<link href="http://download.eclipse.org/eclipse/downloads/documentation/2.0/html/plugins/org.eclipse.platform.doc.isv/reference/api"/>
@@ -161,25 +166,50 @@
 		</javadoc>
 	</target>
 
-	<!-- TODO: connection breaks down -->
+	<!-- =================================================================== -->
+	<!-- deploy targets ...                                                  -->
+	<!-- =================================================================== -->
 	<target name="deploy-javadoc" depends="javadoc">
-		<scp trust="true" verbose="true" password="${passphrase}" todir ="${user}@${www-host}:${www-dir}/api">
+		<scp trust="true" sftp="true" verbose="true" password="${password}" todir ="${www-user}@${www-host}:${www-dir}/api">
 			<fileset dir="${dir.api}">
 				<include name="**/*"/>
 			</fileset>
 		</scp>
 	</target>
 	
-	<!-- TODO: not finished -->
 	<target name="deploy-updatesite">
-		<scp trust="true" verbose="true" passphrase="${passphrase}" keyfile="${user.home}/.ssh/id_rsa" todir ="${user}@${www-host}:${www-dir}/updatesite">
+		<scp trust="true" sftp="true" verbose="true" password="${password}" todir ="${update-user}@${update-host}:${update-dir}">
 			<fileset dir="${dir.updatesite}">
+				<include name="features/org.vimplugin.feature_${plugin.version}.jar"/>
+				<include name="plugins/org.vimplugin.plugin_${plugin.version}.jar"/>
+				<include name="site.xml"/>
     	</fileset>
 		</scp>
-		<!-- 
-		scp "features/org.vimplugin.feature_$1.jar" ${SITE}"/features"
-		scp "plugins/org.vimplugin.plugin_$1.jar" ${SITE}"/plugins"
-		scp "site.xml" ${SITE}
-		-->
 	</target>
+	
+	<target name="deploy-wiki">
+		<echoproperties destfile="doc/wiki/props">
+			<propertyset negate="true">
+				<propertyref name="password"/>
+			</propertyset>
+		</echoproperties>
+	  <concat destfile="doc/wiki/props.txt">
+      <header filtering="no" trimleading="yes">
+====== Ant Properties ======
+&lt;code java&gt;
+      </header>
+	   	<fileset dir="doc/wiki" includes="props"/>
+      <footer filtering="no" trimleading="yes">
+&lt;/code&gt;
+      </footer>
+	  </concat>
+
+		<scp trust="true" sftp="true" verbose="true" password="${password}" todir ="${www-user}@${www-host}:${www-dir}/data/pages">
+			<fileset dir="doc/wiki">
+				<include name="**/*.txt"/>
+			</fileset>
+		</scp>
+
+	</target>
+	
 </project>
