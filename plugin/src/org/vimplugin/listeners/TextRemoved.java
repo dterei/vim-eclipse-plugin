@@ -12,7 +12,6 @@ package org.vimplugin.listeners;
 
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
-import org.vimplugin.VimListener;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.editors.AbstractVimEditor;
 
@@ -23,7 +22,7 @@ public class TextRemoved implements VimListener {
 
 	/**
 	 * reacts on "remove" by removing the text from the editor.
-	 * @see org.vimplugin.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 * @see org.vimplugin.listeners.VimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();

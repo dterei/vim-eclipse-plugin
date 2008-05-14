@@ -151,6 +151,7 @@ public class VimServer {
 		// setup VimConnection and start server thread
 		vc = new VimConnection(ID);
 		t = new Thread(vc);
+		t.setUncaughtExceptionHandler(new VimExceptionHandler());
 		t.setDaemon(true);
 		t.start();
 

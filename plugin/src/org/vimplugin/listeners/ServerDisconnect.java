@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
-import org.vimplugin.VimListener;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.editors.AbstractVimEditor;
 

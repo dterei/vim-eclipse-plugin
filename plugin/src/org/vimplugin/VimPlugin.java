@@ -73,7 +73,7 @@ public class VimPlugin extends AbstractUIPlugin {
 	/**
 	 * Store all the vim instances using their id as the key.
 	 */
-	private HashMap<Integer, VimServer> vimServers = new HashMap<Integer, VimServer>();
+	private final HashMap<Integer, VimServer> vimServers = new HashMap<Integer, VimServer>();
 
 	/**
 	 * The constructor.
@@ -148,6 +148,7 @@ public class VimPlugin extends AbstractUIPlugin {
 	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		nextServerID = 1; // 0 is for the DEFAULT VimServer
@@ -160,6 +161,7 @@ public class VimPlugin extends AbstractUIPlugin {
 	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
@@ -188,4 +190,5 @@ public class VimPlugin extends AbstractUIPlugin {
 	public int getNumberOfBuffers() {
 		return numberOfBuffers;
 	}
+
 }

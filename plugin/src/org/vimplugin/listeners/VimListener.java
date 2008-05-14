@@ -8,7 +8,10 @@
  *
  * See the file COPYING for more information.
  */
-package org.vimplugin;
+package org.vimplugin.listeners;
+
+import org.vimplugin.VimEvent;
+import org.vimplugin.VimException;
 
 /**
  * reacts to {@link org.vimplugin.VimEvent events} issued by a vim instance.

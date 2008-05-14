@@ -15,16 +15,10 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.core.CompletionProposal;
-import org.eclipse.jdt.core.CompletionRequestor;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -73,17 +67,8 @@ public class AbstractVimEditor extends TextEditor {
 
 	protected boolean alreadyClosed = false;
 
-	/**
-	 * Code suggesting Engine
-	 */
-	private CompletionRequestor requestor;
-
-	private IJavaProject iJavaProject;
-
-	/**
-	 * Relative path to this file in the project
-	 */
-	private IPath pathToTheFile;
+	private IFile selectedFile;
+	private IJavaElement iJavaElement;
 
 	/**
 	 * The field to grab for Windows/Win32.
@@ -99,6 +84,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * a shell to open {@link MessageDialog MessageDialogs}.
 	 */
 	private Shell shell;
+
 	
 	/**
 	 * The constructor.
@@ -107,12 +93,6 @@ public class AbstractVimEditor extends TextEditor {
 		super();
 		bufferID = -1; // not really necessary but set it to an invalid buffer
 		setDocumentProvider(documentProvider = new VimDocumentProvider());
-		requestor = new CompletionRequestor() {
-			@Override
-			public void accept(CompletionProposal test) {
-				System.out.println(test.getCompletion());
-			}
-		};
 	}
 
 	/*
@@ -122,40 +102,45 @@ public class AbstractVimEditor extends TextEditor {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		if (!gvimAvailable()) {
+		//shell for messages
+		shell = parent.getShell();
 
-			MessageDialog
-					.openError(
-							parent.getShell(),
-							"Vimplugin",
-							"The gvim executable seems to be not available. Please check the path in Vimplugin-References.");
-			// TODO: handle nicer.
+		if (!gvimAvailable()) {
+			message("The gvim executable seems to be not available. Please check the path in Vimplugin-References.");
+			// TODO: handle nicer. move to another place...
 			close(false);
 			return;
 		}
 
-		// TODO: If external nicer display in Eclipse.
+		//set some flags
+		alreadyClosed = false;
+		dirty = false;
+
+		// nice background (only needed for external)
 		editorGUI = new Canvas(parent, SWT.EMBEDDED);
 		Color color = new Color(parent.getDisplay(), new RGB(0x10, 0x10, 0x10));
 		editorGUI.setBackground(color);
 
-		alreadyClosed = false;
-		dirty = false;
-
+		//create a vim instance
 		createVim(editorGUI);
 
-		shell = parent.getShell();
-		IFileEditorInput iei = (IFileEditorInput) getEditorInput();
-		IFile selectedFile = iei.getFile();
-		pathToTheFile = selectedFile.getProjectRelativePath();
-		iJavaProject = JavaCore.create(selectedFile.getProject());
-		String absolutpath = selectedFile.getRawLocation().toPortableString();
+		//JavaModel
+		selectedFile = ((IFileEditorInput) getEditorInput()).getFile();
+		iJavaElement = JavaCore.create(selectedFile);
+
+
+		//get bufferId
 		bufferID = VimPlugin.getDefault().getNumberOfBuffers();
 		bufferID++;
-		VimPlugin.getDefault().setNumberOfBuffers(bufferID);
+		VimPlugin.getDefault().setNumberOfBuffers(bufferID);		
+		
+		//let vim edit the file.
+		String absolutpath = selectedFile.getRawLocation().toPortableString();
 		VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
 				"editFile", "\"" + absolutpath + "\"");
+
 	}
+	
 
 	/**
 	 * Create a vim instance figuring out if it should be external or embedded.
@@ -169,7 +154,7 @@ public class AbstractVimEditor extends TextEditor {
 			try {
 				createEmbeddedVim(parent);
 			} catch (Exception e) {
-				message("Could not create embedded Widget. Falling back to ExternalVim. \n\n"+e.getMessage());
+				message("Could not create embedded Widget. Falling back to ExternalVim. ",e);
 				createExternalVim(parent);
 			}
 		} else {
@@ -222,6 +207,7 @@ public class AbstractVimEditor extends TextEditor {
 	/**
 	 * @return If gvim exists and is executable.
 	 */
+	//TODO: Move to another place 
 	protected boolean gvimAvailable() {
 		String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
 				PreferenceConstants.P_GVIM);
@@ -271,9 +257,6 @@ public class AbstractVimEditor extends TextEditor {
 		}
 
 		document = null;
-		requestor = null;
-		iJavaProject = null;
-		pathToTheFile = null;
 
 		super.dispose();
 	}
@@ -284,6 +267,7 @@ public class AbstractVimEditor extends TextEditor {
 	 * buffer is the last one the vim will be closed, else only the buffer will
 	 * be closed.
 	 */
+	@Override
 	public void close(boolean save) {
 		System.out.println("close( " + save + " );");
 		if (this.alreadyClosed) {
@@ -310,8 +294,8 @@ public class AbstractVimEditor extends TextEditor {
 						bufferID, "saveAndExit", "");
 				VimPlugin.getDefault().stopVimServer(serverID);
 			} catch (IOException e) {
-				message("Could not stop Server: \n\n"+e.getMessage());				
-				e.printStackTrace();
+				message("Could not stop Server: ",e);				
+
 			}
 		}
 
@@ -367,7 +351,7 @@ public class AbstractVimEditor extends TextEditor {
 		try {
 			document = documentProvider.createDocument(input);
 		} catch (Exception e) {
-			message("Could not create Document:\n\n"+e.getMessage());
+			message("Could not create Document: ",e);
 		}
 	}
 
@@ -419,19 +403,6 @@ public class AbstractVimEditor extends TextEditor {
 		super.firePropertyChange(prop);
 	}
 
-	/**
-	 * According to the given <code>KeySeq</code> executes the actions..
-	 * 
-	 * @param keySeq The key sequence pressed.
-	 * @param pos The position of the cursor in the text file.
-	 */
-	public void fireKeyAction(String keySeq, String pos) {
-		int position = Integer.parseInt(pos);
-		if (keySeq.equals("F11"))
-			possibleCompletions(position + 2);
-		else
-			UtilFunctions.getDefault().convertToKeyStroke(keySeq);
-	}
 
 	/**
 	 * Sets focus (brings to top in Vim) to the buffer.. this function will be
@@ -505,8 +476,7 @@ public class AbstractVimEditor extends TextEditor {
 			setDirty(true);
 			System.out.println(first);
 		} catch (BadLocationException e) {
-			message("Could not insert text into document:"+e.getMessage());
-			e.printStackTrace();
+			message("Could not insert text into document:",e);
 		}
 	}
 
@@ -527,8 +497,7 @@ public class AbstractVimEditor extends TextEditor {
 			document.set(first);
 			setDirty(true);
 		} catch (BadLocationException e) {
-			message("Could not remove text from document:"+e.getMessage());
-			e.printStackTrace();
+			message("Could not remove text from document: ",e);
 		}
 	}
 
@@ -550,16 +519,6 @@ public class AbstractVimEditor extends TextEditor {
 	 * @param position Position in the buffer
 	 */
 	public void possibleCompletions(int position) {
-		try {
-			IJavaElement javaElement = iJavaProject.findElement(pathToTheFile);
-			if (javaElement.getElementType() == IJavaElement.COMPILATION_UNIT) {
-				ICompilationUnit test = (ICompilationUnit) javaElement;
-				test.codeComplete(position, requestor);
-			}
-		} catch (JavaModelException e) {
-			message("Could not perform CodeCompletion: "+e.getMessage());
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -570,25 +529,19 @@ public class AbstractVimEditor extends TextEditor {
 	}
 
 	/**
-	 * @param requestor the requestor to set
-	 */
-	public void setRequestor(CompletionRequestor requestor) {
-		this.requestor = requestor;
-	}
-
-	/**
-	 * @return the requestor
-	 */
-	public CompletionRequestor getRequestor() {
-		return requestor;
-	}
-
-	/**
 	 * simple one-liner to display error-messages using {@link MessageDialog}.
 	 * @param s the string to display
 	 */
+	private void message(String s,Throwable e) {
+		MessageDialog.openError(shell,"Vimplugin",s+UtilFunctions.getDefault().stackTraceToString(e));
+	}
+
 	private void message(String s) {
 		MessageDialog.openError(shell,"Vimplugin",s);
+	}
+
+	public IJavaElement getIJavaElement() {
+		return iJavaElement;
 	}
 
 }

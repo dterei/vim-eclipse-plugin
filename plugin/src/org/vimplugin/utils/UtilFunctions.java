@@ -11,11 +11,12 @@
 package org.vimplugin.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
-import java.util.HashMap;
 
 import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.IParameter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -87,43 +88,6 @@ public final class UtilFunctions {
 		return file;
 	}
 
-	public void convertToKeyStroke(String KeySeq) {
-		// For available actions, see doc/availableActions file..
-		System.out.println(KeySeq);
-
-		if (KeySeq.equals("C-B")) {
-			executeCommand("org.eclipse.ui.project.buildProject");
-		} else if (KeySeq.equals("C-C")) {
-			executeCommand("org.eclipse.ui.project.rebuildProject");
-		} else if (KeySeq.equals("C-F11")) {
-			executeCommand("org.eclipse.debug.ui.commands.RunLast");
-		} else if (KeySeq.equals("F11")) {
-			executeCommand("org.eclipse.debug.ui.commands.DebugLast");
-		}
-
-	}
-
-	/**
-	 * Helper method to execute a command with the given ID that has no
-	 * paramaters that need to be set.
-	 * 
-	 * @param ID The id of the command to execute
-	 */
-	private void executeCommand(String ID) {
-		ICommandService com = (ICommandService) PlatformUI.getWorkbench()
-				.getService(ICommandService.class);
-		Command c = com.getCommand(ID);
-		ExecutionEvent e = new ExecutionEvent(c, new HashMap<String, String>(),
-				null, null);
-
-		try {
-			c.executeWithChecks(e);
-		} catch (Exception err) {
-			//TODO: better ErrorHandling (when used again)
-			err.printStackTrace();
-		}
-	}
-
 	/**
 	 * Print Useful info about a command.
 	 * 
@@ -169,5 +133,23 @@ public final class UtilFunctions {
 			System.out.println(s);
 		}
 	}
+	
+	public String stackTraceToString(Throwable e) {
+		String retValue = null;
+		StringWriter sw = null;
+		PrintWriter pw = null;
+		try {
+		 sw = new StringWriter();
+		 pw = new PrintWriter(sw);
+		 e.printStackTrace(pw);
+		 retValue = sw.toString();
+		} finally {
+		 try {
+		   if(pw != null)  pw.close();
+		   if(sw != null)  sw.close();
+		 } catch (IOException ignore) {}
+		}
+		return retValue;
+		}
 
 }
