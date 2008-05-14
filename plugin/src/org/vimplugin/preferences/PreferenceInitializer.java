@@ -13,9 +13,7 @@ package org.vimplugin.preferences;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-
 import org.vimplugin.VimPlugin;
-import org.vimplugin.preferences.PreferenceConstants;
 
 /**
  * Initializes default preference values.
@@ -25,6 +23,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	/**
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
 	 */
+	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = VimPlugin.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_PORT, 3219);
@@ -33,14 +32,16 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		//Platform specific code
 		if( Platform.getOS().equals(Platform.OS_WIN32) ) {
-			store.setDefault(PreferenceConstants.P_GVIM, "");
+			store.setDefault(PreferenceConstants.P_GVIM, "!!TODO: typical location!!");
 		} else if( Platform.getOS().equals(Platform.OS_LINUX) ) {
-			store.setDefault(PreferenceConstants.P_GVIM, "");
+			store.setDefault(PreferenceConstants.P_GVIM, "/usr/bin/gvim");
 		}  
 
-		store.setDefault(PreferenceConstants.P_OPTS, "");
+		store.setDefault(PreferenceConstants.P_OPTS, "-U ~/.vimpluginrc");
 		store.setDefault(PreferenceConstants.P_DEBUG, true);
-		store.setDefault(PreferenceConstants.P_EMBD, false);
+		store.setDefault(PreferenceConstants.P_EMBD, true);
+		
+		store.setDefault(PreferenceConstants.P_KEY1, "F3");
 	}
 
 }

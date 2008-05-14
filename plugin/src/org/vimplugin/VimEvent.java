@@ -10,16 +10,18 @@
  */
 package org.vimplugin;
 
+import org.vimplugin.editors.AbstractVimEditor;
+
 /**
  * Resembles an event thrown by vim and caught by various listeners in vimplugin.
  */
 public class VimEvent {
 
 	/** The complete line vim threw.  */
-	private String line;
+	private final String line;
 	
 	/** the connection this event came from */
-	private VimConnection connection;
+	private final VimConnection connection;
 
 	/** Simply sets both private attributes. */
 	public VimEvent(String _line,VimConnection _connection) {
@@ -109,6 +111,15 @@ public class VimEvent {
 	 */
 	public VimConnection getConnection() {
 		return connection;
+	}
+
+	/**
+	 * shortcut to get the AbstractVimEditor (on eclipse side) of this Event
+	 * @return
+	 */
+	public AbstractVimEditor getEditor() throws VimException {
+		return VimPlugin.getDefault().getVimserver(
+				this.getConnection().getVimID()).getEditor(this.getBufferID());
 	}
 
 }

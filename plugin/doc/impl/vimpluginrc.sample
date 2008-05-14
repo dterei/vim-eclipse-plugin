@@ -1,0 +1,12 @@
+set go-=m
+set go-=T
+cmap <F1> nbkey F1
+cmap <F2> nbkey F2
+cmap <F3> nbkey F3
+cmap <F4> nbkey F4
+cmap <F5> nbkey F5
+cmap <F6> nbkey F6
+cmap <F7> nbkey F7
+cmap <F8> nbkey F8
+cmap <F9> nbkey F9
+cmap <F10> nbkey F10

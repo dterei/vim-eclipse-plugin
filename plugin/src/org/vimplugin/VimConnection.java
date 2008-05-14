@@ -16,11 +16,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.vimplugin.handlers.CommandHandler;
-import org.vimplugin.handlers.HandleDummy;
+import org.vimplugin.handlers.HandleComplete;
 import org.vimplugin.handlers.HandleEclipseCommand;
+import org.vimplugin.handlers.HandleUndefined;
 import org.vimplugin.listeners.FileOpened;
 import org.vimplugin.listeners.FileUnmodified;
 import org.vimplugin.listeners.KeyCommand2;
@@ -55,6 +57,9 @@ public class VimConnection implements Runnable {
 	/** the set of VimListeners. Observer-Pattern. */
 	private final HashSet<VimListener> listeners = new HashSet<VimListener>();
 
+	private final HashMap<String, CommandHandler> handlers;
+	private final HashMap<String, KeyCommand2> commands;
+	
 	/** the id of the calling vim instance (as given in VimServer) */
 	private final int vimID;
 
@@ -76,6 +81,9 @@ public class VimConnection implements Runnable {
 		port = VimPlugin.getDefault().getPreferenceStore().getInt(
 				PreferenceConstants.P_PORT);
 		vimID = instanceID;
+		
+		handlers = new HashMap<String, CommandHandler>();
+		commands = new HashMap<String, KeyCommand2>();
 	}
 
 	/**
@@ -132,18 +140,18 @@ public class VimConnection implements Runnable {
 				ve.printStackTrace();
 			}
 
-			CommandHandler h ;
-
 			// Code Completion suggestions
-			h = new HandleDummy(); // new HandleComplete(..?..)
-			listeners.add(new KeyCommand2("F2",h));
-			command(vimID, "specialKeys", "F2");			
 			
-			//TODO: SpecialKey <-> EclipseCommand Mapping in Preferences
-			// Build Project --Press Ctrl+B
-			h = new HandleEclipseCommand("org.eclipse.ui.project.buildProject");
-			listeners.add(new KeyCommand2("C-B",h));
-			command(vimID, "specialKeys", "\"C-B\"");
+			CommandHandler ch = new HandleComplete();
+			KeyCommand2 kc = new KeyCommand2("F2");
+			kc.setHandler(ch);
+			listeners.add(kc);
+			command(vimID, "specialKeys", "\"F2\"");			
+			
+			//Hotkey1
+			String key1 = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_KEY1);
+			String command1 = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_COMMAND1);
+			setEclipseCommandHandler(key1, command1);
 
 			try {
 				while ((serverRunning && (line = in.readLine()) != null)) {
@@ -160,6 +168,36 @@ public class VimConnection implements Runnable {
 			// TODO: better ErrorHandling (Connection Thread)
 			e.printStackTrace();
 		}
+	}
+	
+	KeyCommand2 command;
+	CommandHandler handler;
+	
+
+	public void setEclipseCommandHandler(String key, String eclipseCommandId) {
+		//lookup existing handler or create a new one
+		handler = handlers.get(eclipseCommandId);
+		if (handler == null) {
+			handler = new HandleEclipseCommand(eclipseCommandId);	
+			handlers.put(eclipseCommandId,handler);
+		}
+		
+		//we have already something in this command.
+		if (command!=null) {
+			command.setHandler(new HandleUndefined("This key is registered, but has currently no handler! "+ command.getKey()));
+		}
+		
+		//lookup existing command or create a new one
+		command = commands.get(key);
+		if (command == null) {
+			command = new KeyCommand2(key);
+			commands.put(key,command);	
+			//also add listener and inform vim about new key
+			listeners.add(command);
+			command(vimID, "specialKeys", "\""+key+"\"");
+		} 
+		
+		command.setHandler(handler);
 	}
 
 	/**

@@ -19,7 +19,8 @@ public class HandleEclipseCommand implements CommandHandler {
 		this.id = id;
 	}
 
-	public void handle() {
+	public void handle(Object... params) {
+		System.out.println("trying to exec eclipse command "+id);
 		ICommandService com = (ICommandService) PlatformUI.getWorkbench()
 				.getService(ICommandService.class);
 		Command c = com.getCommand(id);

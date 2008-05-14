@@ -211,5 +211,20 @@ public class VimServer {
 	public HashSet<AbstractVimEditor> getEditors() {
 		return editors;
 	}
-
+	
+	/**
+	 * Gets an {@link AbstractVimEditor} by the vim buffer-id.
+	 * 
+	 * @param bufid the id to lookup
+	 * @return the corresponding editor or null if none is found.
+	 */
+	public AbstractVimEditor getEditor(int bufid) {
+		for (AbstractVimEditor veditor : getEditors()) {
+			if (veditor.getBufferID() == bufid) {
+				return veditor;				
+			}
+		}
+		return null;
+	}
+	
 }

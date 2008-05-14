@@ -26,11 +26,10 @@ import org.vimplugin.handlers.CommandHandler;
 public class KeyCommand2 implements VimListener {
 
 	private final String key;
-	private final CommandHandler handler;
+	private CommandHandler handler;
 	
-	public KeyCommand2(String key, CommandHandler handler) {
+	public KeyCommand2(String key) {
 		this.key = key;
-		this.handler = handler;
 	}
 	
 	/**
@@ -42,17 +41,29 @@ public class KeyCommand2 implements VimListener {
 	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();
 		if (event.equals("keyAtPos") == true) {
+			
 			String keySeq = ve.getArgument(0);
 			keySeq = keySeq.substring(1, keySeq.length() - 1);
-			String pos = ve.getArgument(1);
+			
 			for (AbstractVimEditor veditor : VimPlugin.getDefault()
 					.getVimserver(ve.getConnection().getVimID()).getEditors()) {
 				if (veditor.getBufferID() == ve.getBufferID()) {
-					int position = Integer.parseInt(pos);
-					if (keySeq.equals(key)) handler.handle();				
+					if (keySeq.equals(key)) handler.handle(ve);				
 				}
 			}
 
 		}
+	}
+
+	public CommandHandler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(CommandHandler handler) {
+		this.handler = handler;
+	}
+
+	public String getKey() {
+		return key;
 	}
 }

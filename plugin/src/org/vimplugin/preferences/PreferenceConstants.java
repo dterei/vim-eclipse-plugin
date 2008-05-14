@@ -36,8 +36,11 @@ public class PreferenceConstants {
 	/** embed vim into eclipse */
 	public static final String P_EMBD = "embedded";
 
-	/** unsed feature ATM */
-	public static final String P_KEY = "hotkey";
+	/** HotKey 1 */
+	public static final String P_KEY1 = "hotkey1";
+	
+	/** Command 1 */
+	public static final String P_COMMAND1 = "command1";
 	
 
 }
