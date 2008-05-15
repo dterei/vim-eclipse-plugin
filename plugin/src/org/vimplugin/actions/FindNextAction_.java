@@ -12,7 +12,6 @@ package org.vimplugin.actions;
 
 import org.eclipse.ui.texteditor.TextEditorAction;
 import org.vimplugin.VimPluginStrings;
-import org.vimplugin.utils.*;
 
 public class FindNextAction_ extends TextEditorAction {
 
@@ -27,6 +26,7 @@ public class FindNextAction_ extends TextEditorAction {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.action.Action#run()
 	 */
+	@Override
 	public void run() {
 		/*
 		 * ITextEditor editor= getTextEditor(); editor.resetHighlightRange();
@@ -39,6 +39,7 @@ public class FindNextAction_ extends TextEditorAction {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.texteditor.TextEditorAction#update()
 	 */
+	@Override
 	public void update() {
 		// setChecked(getTextEditor() != null &&
 		// getTextEditor().showsHighlightRangeOnly());
