@@ -53,6 +53,10 @@
           **/*.deploy, **/*.location, **/*.execution, **/*.datapool, 
           **/*.artifact, **/*.html, **/*.svg, **/*.java"/>
 		</copy>
+		<tstamp>
+		    <format property="${timestamp}" pattern="d-MMMM-yyyy" locale="en,UK"/>
+	  </tstamp>
+
 	</target>
 
 
@@ -187,29 +191,34 @@
 		</scp>
 	</target>
 	
-	<target name="deploy-wiki">
-		<echoproperties destfile="doc/wiki/props">
-			<propertyset negate="true">
-				<propertyref name="password"/>
-			</propertyset>
-		</echoproperties>
-	  <concat destfile="doc/wiki/props.txt">
-      <header filtering="no" trimleading="yes">
-====== Ant Properties ======
-&lt;code java&gt;
-      </header>
-	   	<fileset dir="doc/wiki" includes="props"/>
-      <footer filtering="no" trimleading="yes">
-&lt;/code&gt;
-      </footer>
-	  </concat>
-
+	<target name="deploy-wiki" depends="todos">
 		<scp trust="true" sftp="true" verbose="true" password="${password}" todir ="${www-user}@${www-host}:${www-dir}/data/pages">
 			<fileset dir="doc/wiki">
 				<include name="**/*.txt"/>
 			</fileset>
 		</scp>
 
+	</target>
+	
+	<target name="todos">
+				<concat destfile="doc/wiki/todo.txt">
+					<path>
+		        <fileset dir="${dir.src}" includes="**/*.java"/>
+		      </path>
+		      <header filtering="no" trimleading="yes">
+//Would be great if we had filenames and/or Linenumbers here. Checkout the ant build.xml, target "todo" to fox this. For the time being, use the "Tasks"-View in Eclipse and write TODO texts that are understandable without context ... :-) //
+		      </header>
+		      <filterchain>
+		      	 <expandproperties/>
+		         <linecontains>
+		           <contains value="TODO"/>
+		         </linecontains>
+		      	<tokenfilter>
+		      		<replaceregex pattern=".*TODO\s?:?\s*" replace="  * " flags="gi"/>
+		      	</tokenfilter>
+		      </filterchain>
+				</concat>
+		
 	</target>
 	
 </project>
