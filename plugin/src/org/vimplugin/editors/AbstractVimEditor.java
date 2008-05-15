@@ -12,6 +12,8 @@ package org.vimplugin.editors;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 
 import org.eclipse.core.resources.IFile;
@@ -37,7 +39,6 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.preferences.PreferenceConstants;
-import org.vimplugin.utils.UtilFunctions;
 
 /**
  * Provides an Editor to Eclipse which is backed by a Vim instance. This class
@@ -428,7 +429,8 @@ public class AbstractVimEditor extends TextEditor {
 	 * @param path
 	 */
 	public void setTitleTo(String path) {
-		setPartName(UtilFunctions.getDefault().fileName(path));
+		String filename = path.substring(path.lastIndexOf(File.separator) + 1);
+		setPartName(filename);
 		setContentDescription(path);
 		firePropertyChange(PROP_TITLE);
 	}
@@ -454,6 +456,33 @@ public class AbstractVimEditor extends TextEditor {
 	}
 
 	/**
+	 * Remove the backslashes from the given string.
+	 * 
+	 * @param text String to remove from
+	 * @return The processed string
+	 */
+	private String removeBackSlashes(String text) {
+		if (text.length() <= 2)
+			return text;
+		int offset = 0, length = text.length(), offset1 = 0;
+		// System.out.println("Initial-->"+text);
+		String newText = "";
+		while (offset < length) {
+			offset1 = text.indexOf('\\', offset);
+			// System.out.println(newText+"--> "+offset+" ->"+offset1);
+			if (offset1 < 0) {
+				newText = newText + text.substring(offset);
+				break;
+			}
+			newText = newText + text.substring(offset, offset1)
+					+ text.substring(offset1 + 1, offset1 + 2);
+			offset = offset1 + 2;
+		}
+		// System.out.println(newText+"-->Final");
+		return newText;
+	}
+	
+	/**
 	 * Inserts text into document FIXME Not working properly.. both
 	 * insertDocument and removeDocument have some implementation problems.. 
 	 * TODO: More details please?
@@ -462,8 +491,10 @@ public class AbstractVimEditor extends TextEditor {
 	 * @param offset The offset to insert it at.
 	 */
 	public void insertDocumentText(String text, int offset) {
-		text = UtilFunctions.getDefault().removeBackSlashes(text);
+		text = removeBackSlashes(text);
+
 		System.out.println(text + " INSERT " + offset);
+
 		try {
 			String first = document.get(0, offset);
 			String last = document.get(offset, document.getLength() - offset);
@@ -530,10 +561,31 @@ public class AbstractVimEditor extends TextEditor {
 
 	/**
 	 * simple one-liner to display error-messages using {@link MessageDialog}.
-	 * @param s the string to display
+	 * @param message the string to display
 	 */
-	private void message(String s,Throwable e) {
-		MessageDialog.openError(shell,"Vimplugin",s+UtilFunctions.getDefault().stackTraceToString(e));
+	private void message(String message,Throwable e) {
+		
+		//convert stacktrace to string
+		String stacktrace;
+		StringWriter sw = null;
+		PrintWriter pw = null;
+		try {
+			sw = new StringWriter();
+			pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			stacktrace = sw.toString();
+		} finally {
+			try {
+				if (pw != null)
+					pw.close();
+				if (sw != null)
+					sw.close();
+			} catch (IOException ignore) {
+			}
+		}
+
+		
+		MessageDialog.openError(shell,"Vimplugin",message+stacktrace);
 	}
 
 	private void message(String s) {
