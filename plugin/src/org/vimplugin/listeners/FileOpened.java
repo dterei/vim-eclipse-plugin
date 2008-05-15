@@ -18,13 +18,13 @@ import org.vimplugin.editors.AbstractVimEditor;
 /** 
  * The File was opened, set Titles.  
  */
-public class FileOpened implements VimListener {
+public class FileOpened implements IVimListener {
 
 	/**
 	 * reacts to "fileOpened" by opening the file in the
 	 * {@link org.vimplugin.editors.AbstractVimEditor VimEditor}.
 	 * 
-	 * @see org.vimplugin.listeners.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();

@@ -14,12 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Collection;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.IParameter;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
 
 /**
  * Place all the global functions in this class
@@ -94,7 +91,7 @@ public final class UtilFunctions {
 	 * @param c The command
 	 */
 	@SuppressWarnings("unused")
-	private void printCommandInfo(Command c) {
+	private static void printCommandInfo(Command c) {
 		try {
 			System.out.println("Defined: " + c.isDefined());
 			System.out.println("Handled: " + c.isHandled());
@@ -124,14 +121,7 @@ public final class UtilFunctions {
 	 * Print out all available commands in Eclipse.
 	 */
 	@SuppressWarnings( { "unused", "unchecked" })
-	private void printAllCommands() {
-		ICommandService com = (ICommandService) PlatformUI.getWorkbench()
-				.getService(ICommandService.class);
-
-		Collection ids = com.getDefinedCommandIds();
-		for (Object s : ids) {
-			System.out.println(s);
-		}
+	public static void printAllCommands() {
 	}
 	
 	public String stackTraceToString(Throwable e) {

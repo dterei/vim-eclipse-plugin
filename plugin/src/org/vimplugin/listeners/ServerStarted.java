@@ -17,11 +17,11 @@ import org.vimplugin.VimException;
 /**
  * Fires server started event.
  */
-public class ServerStarted implements VimListener {
+public class ServerStarted implements IVimListener {
 
 	/**
 	 * initializes the {@link VimConnection VimConnection} on "startupDone".
-	 * @see org.vimplugin.listeners.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();

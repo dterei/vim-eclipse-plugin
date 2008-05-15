@@ -18,11 +18,11 @@ import org.vimplugin.editors.AbstractVimEditor;
 /**
  * Some text has been inserted, so modify document also.
  */
-public class TextInsert implements VimListener {
+public class TextInsert implements IVimListener {
 
 	/**
 	 * reacts to "insert" by inserting the corresponding text into the editor.
-	 * @see org.vimplugin.listeners.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	public void handleEvent(VimEvent ve) throws VimException {
 			String event = ve.getEvent();

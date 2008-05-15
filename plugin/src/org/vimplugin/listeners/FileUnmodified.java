@@ -18,12 +18,12 @@ import org.vimplugin.editors.AbstractVimEditor;
 /**
  * The File became unmodified.
  */
-public class FileUnmodified implements VimListener {
+public class FileUnmodified implements IVimListener {
 
 	/**
 	 * Removes the star from the editors title on "save" or "unmodified".
 	 * 
-	 * @see org.vimplugin.listeners.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();

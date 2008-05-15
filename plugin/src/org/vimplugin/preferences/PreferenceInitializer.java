@@ -40,8 +40,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_OPTS, "-U ~/.vimpluginrc");
 		store.setDefault(PreferenceConstants.P_DEBUG, true);
 		store.setDefault(PreferenceConstants.P_EMBD, true);
-		
-		store.setDefault(PreferenceConstants.P_KEY1, "F3");
 	}
 
 }

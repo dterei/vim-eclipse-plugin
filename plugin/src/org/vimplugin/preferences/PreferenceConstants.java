@@ -36,11 +36,11 @@ public class PreferenceConstants {
 	/** embed vim into eclipse */
 	public static final String P_EMBD = "embedded";
 
-	/** HotKey 1 */
-	public static final String P_KEY1 = "hotkey1";
+	/** HotKeys */
+	public static final String[] P_KEYS = {"hotkey1","hotkey2","hotkey3","hotkey4","hotkey5"};
 	
-	/** Command 1 */
-	public static final String P_COMMAND1 = "command1";
+	/** Commands */
+	public static final String[] P_COMMANDS = {"command1","command2","command3","command4","command5"};
 	
 
 }

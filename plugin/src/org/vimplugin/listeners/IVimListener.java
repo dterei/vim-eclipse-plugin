@@ -21,7 +21,7 @@ import org.vimplugin.VimException;
  * @see <a href="http://www.vim.org/htmldoc/netbeans.html#netbeans-protocol">Protocol specification</a>
  * 
  */
-public interface VimListener {
+public interface IVimListener {
 
 	/**
 	 * The VimEvent contains the specific messages we can react to. To do so, we

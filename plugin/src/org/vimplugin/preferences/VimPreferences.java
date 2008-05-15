@@ -10,6 +10,10 @@
  */
 package org.vimplugin.preferences;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import org.eclipse.core.commands.Command;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -17,6 +21,8 @@ import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.vimplugin.VimConnection;
 import org.vimplugin.VimPlugin;
 
@@ -34,11 +40,19 @@ import org.vimplugin.VimPlugin;
 public class VimPreferences extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
+
+	private final StringFieldEditor[] hotkeys;
+	private final ComboFieldEditor[] combos;
+	
 	/**
 	 * Initializes the preference store and sets a description for the dialog. 
 	 */
 	public VimPreferences() {
 		super(FieldEditorPreferencePage.GRID);
+		hotkeys = new StringFieldEditor[5];
+		combos = new ComboFieldEditor[5];
+		
+		
 		setPreferenceStore(VimPlugin.getDefault().getPreferenceStore());
 		setDescription("General Settings");
 	}
@@ -64,18 +78,53 @@ public class VimPreferences extends FieldEditorPreferencePage implements
 				"additional Parameters:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_DEBUG,
 				"Debug to stdout:", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_KEY1,
-				"Hot Key 1:", getFieldEditorParent()));
 		
-		String[][] commands = {
-				{"build","org.eclipse.ui.project.buildProject"},
-				{"rebuild","org.eclipse.ui.project.rebuildProject"},
-				{"runlast","org.eclipse.debug.ui.commands.RunLast"}
-		};
-		addField(new ComboFieldEditor(PreferenceConstants.P_COMMAND1,
-				"Command 1:", commands,getFieldEditorParent() ));
+		for (int i = 0; i < 5; i++) {
+			hotkeys[i] = new StringFieldEditor(PreferenceConstants.P_KEYS[i],
+					"Hotkey "+i, getFieldEditorParent());
+			combos[i] = new ComboFieldEditor(PreferenceConstants.P_COMMANDS[i],
+					"Command "+i, getCommands(),getFieldEditorParent());
+		}
+
+		for (int i = 0; i < 5; i++) {
+			addField(hotkeys[i]);
+			addField(combos[i]);
+		}
+		
 	}
 
+	/**
+	 * calculate defined commands
+	 * @return an array suitable for the {@link ComboFieldEditor} in the preferencepage.
+	 */
+	private String[][] getCommands() {
+		ICommandService com = (ICommandService) PlatformUI.getWorkbench()
+				.getService(ICommandService.class);
+
+		Command[] commands = com.getDefinedCommands();
+		
+		//filter out duplicates
+		HashSet<String> nodupes = new HashSet<String>();
+		
+		for (int i = 0; i < commands.length; i++) {
+			Command command = commands[i];
+			if (command.getId().startsWith("org.eclipse.ui.project")) {
+				nodupes.add(command.getId());
+			}
+		}
+
+		String[][] commandpairs = new String[nodupes.size()][2];
+		Object[] a = nodupes.toArray();
+		System.out.println("These are the command ids: "+Arrays.toString(a));
+		
+		for (int i = 0; i<a.length;i++) {
+			commandpairs[i][0]=(String)a[i];
+			commandpairs[i][1]=(String)a[i];
+		}
+		
+		return commandpairs;
+	}
+	
 	/**
 	 * does nothing.
 	 * 
@@ -89,10 +138,14 @@ public class VimPreferences extends FieldEditorPreferencePage implements
 		int vimid = VimPlugin.getDefault().getDefaultVimServer();
 		VimConnection vc = VimPlugin.getDefault().getVimserver(vimid).getVc(); 
 		
-		String key1 = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_KEY1);
-		String command1 = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_COMMAND1);
+		String key, command = null;
+		for (int i = 0; i < 5; i++) {
+			key = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_KEYS[i]);
+			command = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_COMMANDS[i]);
+			vc.getRegistry().setEclipseCommandHandler(vc, key, command,i);
+		}
+		
 
-		vc.setEclipseCommandHandler(key1, command1);
 		
 		return super.performOk();
 	}

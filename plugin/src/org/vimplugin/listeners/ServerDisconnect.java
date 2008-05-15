@@ -20,7 +20,7 @@ import org.vimplugin.editors.AbstractVimEditor;
 /**
  * Closes the editor window if the server was closed.
  */
-public class ServerDisconnect implements VimListener {
+public class ServerDisconnect implements IVimListener {
 
 	/**
 	 * Disposes the {@link org.vimplugin.editors.AbstractVimEditor ViMEditor} on

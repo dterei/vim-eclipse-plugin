@@ -18,11 +18,11 @@ import org.vimplugin.editors.AbstractVimEditor;
 /**
  * Some text has been removed.. so remove that text in document also.
  */
-public class TextRemoved implements VimListener {
+public class TextRemoved implements IVimListener {
 
 	/**
 	 * reacts on "remove" by removing the text from the editor.
-	 * @see org.vimplugin.listeners.VimListener#handleEvent(org.vimplugin.VimEvent)
+	 * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
 	 */
 	public void handleEvent(VimEvent ve) throws VimException {
 		String event = ve.getEvent();
