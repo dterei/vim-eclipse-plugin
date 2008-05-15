@@ -8,20 +8,20 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  ******************************************************************************/
-package org.vimplugin.utils;
+package org.vimplugin;
 // TODO : Incompatible License with GPL, need to remove
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class VimEditorMessages {
+public class VimPluginStrings {
 
-	private static final String RESOURCE_BUNDLE = "org.vimplugin.utils.VimEditorMessages";
+	private static final String RESOURCE_BUNDLE = "org.vimplugin.VimPluginStrings";
 
 	private static ResourceBundle fgResourceBundle = ResourceBundle
 			.getBundle(RESOURCE_BUNDLE);
 
-	private VimEditorMessages() {
+	private VimPluginStrings() {
 	}
 
 	public static String getString(String key) {

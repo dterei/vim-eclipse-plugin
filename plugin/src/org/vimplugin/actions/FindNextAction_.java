@@ -11,6 +11,7 @@
 package org.vimplugin.actions;
 
 import org.eclipse.ui.texteditor.TextEditorAction;
+import org.vimplugin.VimPluginStrings;
 import org.vimplugin.utils.*;
 
 public class FindNextAction_ extends TextEditorAction {
@@ -19,7 +20,7 @@ public class FindNextAction_ extends TextEditorAction {
 	 * Constructs and updates the action.
 	 */
 	public FindNextAction_() {
-		super(VimEditorMessages.getResourceBundle(), "FindNext.", null); //$NON-NLS-1$
+		super(VimPluginStrings.getResourceBundle(), "FindNext.", null); //$NON-NLS-1$
 		update();
 	}
 
