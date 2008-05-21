@@ -27,7 +27,10 @@ import org.vimplugin.VimPlugin;
 /**
  * A very simple command launcher for both the netbeans protocol (start command
  * with nb: then) and "vim --remote-send" commands (start command with "vr:"
- * then).
+ * then). Examples:
+ * <pre>
+ * vr: iHallo Welt<ESC>
+ * </pre>
  */
 public class CommandView extends ViewPart {
 
@@ -40,11 +43,12 @@ public class CommandView extends ViewPart {
 
 			//TODO: cleanup launching of commands inside vim.
 			public void handleEvent(Event e) {
-				System.out.println("Command View: " + e.character);
+				//System.out.println("Command View: " + e.character);
 				if (e.character == 0x0D) {
 
 					String line1 = input.getText().substring(3);
 					if (input.getText().startsWith("vr:")) {
+						//TODO set and lookup --servername from VimServer instance.
 						String[] args = { "vim", "--servername", "GVIM",
 								"--remote-send", line1 };
 						try {
