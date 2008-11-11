@@ -5,8 +5,10 @@
       version="0.3.4"
       provider-name="Vimplugin Project">
 
-   <description url="http://vimplugin.org">
-      Vimplugin: use vim inside eclipse
+   <description>
+      Vimplugin is an Eclipse plugin that brings the power of the editor
+Vim to the Eclipse IDE. It allows for a full featured native
+vim instance to be used with Eclipse.
    </description>
 
    <copyright>
@@ -14,18 +16,40 @@
    </copyright>
 
    <license>
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. 
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+      This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 2 of
+the License, or (at your option) any later version. 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
+USA.
    </license>
+
+   <url>
+      <update label="Vimplugin" url="http://vimplugin.sf.net/update"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.jdt.core"/>
+   </requires>
 
    <plugin
          id="org.vimplugin.plugin"
          download-size="0"
          install-size="0"
-         version="0.3.4"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

@@ -3,6 +3,7 @@
 	<name>feature</name>
 	<comment></comment>
 	<projects>
+		<project>plugin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
