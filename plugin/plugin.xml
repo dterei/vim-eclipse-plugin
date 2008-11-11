@@ -43,7 +43,11 @@
             default="false"
             icon="icons/vim16x16.gif"
             id="org.vimplugin.editors.VimEditorNewProcess"
-            name="Vim (new process)"/>            
+            name="Vim (new process)">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.core.runtime.text">
+         </contentTypeBinding>
+      </editor>            
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
