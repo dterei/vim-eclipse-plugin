@@ -50,7 +50,6 @@ public class EclipseCommand implements IHandler {
 	 * 
 	 * @param c The command
 	 */
-	@SuppressWarnings("unused")
 	private void printCommandInfo(Command c) {
 		try {
 			System.out.println("Info about command "+c.getId());
