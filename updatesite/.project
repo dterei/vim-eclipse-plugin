@@ -3,6 +3,8 @@
 	<name>updatesite</name>
 	<comment></comment>
 	<projects>
+		<project>feature</project>
+		<project>plugin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
