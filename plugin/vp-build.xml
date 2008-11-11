@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<!-- ===================================================================== --> 
+<!-- ===================================================================== -->
 <!-- Vimplugin                                                             -->
 <!-- Author: David Terei                                                   -->
 <!-- Ant 1.7.0 build file                                                  -->
@@ -29,7 +29,7 @@
 	<property name="update-host" value="vimplugin.sf.net"/>
 	<property name="update-dir" value="/home/groups/v/vi/vimplugin/htdocs/update"/>
 
-		<!-- plugin output file name -->
+	<!-- plugin output file name -->
 	<property name="plugin.name" value="org.vimplugin.plugin"/>
 	<property name="plugin.build" value="testing"/>
 
@@ -54,9 +54,8 @@
           **/*.artifact, **/*.html, **/*.svg, **/*.java"/>
 		</copy>
 		<tstamp>
-		    <format property="${timestamp}" pattern="d-MMMM-yyyy" locale="en,UK"/>
-	  </tstamp>
-
+			<format property="${timestamp}" pattern="d-MMMM-yyyy" locale="en,UK"/>
+		</tstamp>
 	</target>
 
 
@@ -180,17 +179,17 @@
 			</fileset>
 		</scp>
 	</target>
-	
+
 	<target name="deploy-updatesite">
 		<scp trust="true" sftp="true" verbose="true" password="${password}" todir ="${update-user}@${update-host}:${update-dir}">
 			<fileset dir="${dir.updatesite}">
 				<include name="features/org.vimplugin.feature_${plugin.version}.jar"/>
 				<include name="plugins/org.vimplugin.plugin_${plugin.version}.jar"/>
 				<include name="site.xml"/>
-    	</fileset>
+			</fileset>
 		</scp>
 	</target>
-	
+
 	<target name="deploy-wiki" depends="todos">
 		<scp trust="true" sftp="true" verbose="true" password="${password}" todir ="${www-user}@${www-host}:${www-dir}/data/pages">
 			<fileset dir="doc/wiki">
@@ -199,26 +198,26 @@
 		</scp>
 
 	</target>
-	
+
 	<target name="todos">
-				<concat destfile="doc/wiki/todo.txt">
-					<path>
-		        <fileset dir="${dir.src}" includes="**/*.java"/>
-		      </path>
-		      <header filtering="no" trimleading="yes">
+		<concat destfile="doc/wiki/todo.txt">
+			<path>
+				<fileset dir="${dir.src}" includes="**/*.java"/>
+			</path>
+			<header filtering="no" trimleading="yes">
 //Would be great if we had filenames and/or Linenumbers here. Checkout the ant build.xml, target "todo" to fox this. For the time being, use the "Tasks"-View in Eclipse and write TODO texts that are understandable without context ... :-) //
 		      </header>
-		      <filterchain>
-		      	 <expandproperties/>
-		         <linecontains>
-		           <contains value="TODO"/>
-		         </linecontains>
-		      	<tokenfilter>
-		      		<replaceregex pattern=".*TODO\s?:?\s*" replace="  * " flags="gi"/>
-		      	</tokenfilter>
-		      </filterchain>
-				</concat>
-		
+			<filterchain>
+				<expandproperties/>
+				<linecontains>
+					<contains value="TODO"/>
+				</linecontains>
+				<tokenfilter>
+					<replaceregex pattern=".*TODO\s?:?\s*" replace="  * " flags="gi"/>
+				</tokenfilter>
+			</filterchain>
+		</concat>
+
 	</target>
-	
+
 </project>

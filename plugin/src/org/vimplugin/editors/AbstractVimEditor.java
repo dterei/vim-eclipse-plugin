@@ -493,19 +493,19 @@ public class AbstractVimEditor extends TextEditor {
 	public void insertDocumentText(String text, int offset) {
 		text = removeBackSlashes(text);
 
-		System.out.println(text + " INSERT " + offset);
+		//System.out.println(text + " INSERT " + offset);
 
 		try {
 			String first = document.get(0, offset);
 			String last = document.get(offset, document.getLength() - offset);
 			if (text.equals(new String("\\n"))) {
-				System.out.println("Insert new Line");
+				//System.out.println("Insert new Line");
 				first = first + System.getProperty("line.separator") + last;
 			} else
 				first = first + text + last;
 			document.set(first);
 			setDirty(true);
-			System.out.println(first);
+			//System.out.println(first);
 		} catch (BadLocationException e) {
 			message("Could not insert text into document:",e);
 		}
@@ -518,13 +518,13 @@ public class AbstractVimEditor extends TextEditor {
 	 * @param length The amount of text to remove.
 	 */
 	public void removeDocumentText(int offset, int length) {
-		System.out.println(offset + " REMOVE " + length);
+		//System.out.println(offset + " REMOVE " + length);
 		try {
 			String first = document.get(0, offset);
 			String last = document.get(offset + length, document.getLength()
 					- offset - length);
 			first = first + last;
-			System.out.println(first);
+			//System.out.println(first);
 			document.set(first);
 			setDirty(true);
 		} catch (BadLocationException e) {
